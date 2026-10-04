@@ -4,8 +4,9 @@ from collections import deque
 import cv2
 import numpy as np
 
-from .core import Part, Project
-from .inference import SegmentationBackend
+from .core import Part, Project, validate
+from .inference import PartsProposal, SegmentationBackend
+from .inpainting import RepairProposal
 
 
 class Editor:
@@ -66,20 +67,21 @@ class Editor:
         self.project.parts.pop(index)
 
     def paint(self, index: int, start: tuple[int, int], end: tuple[int, int],
-              radius: int, erase: bool = False) -> None:
+              radius: int, erase: bool = False, hidden: bool = False) -> None:
         """Caller checkpoints once per stroke, not once per mouse event."""
         if radius < 1:
             raise ValueError("ブラシ半径は1以上にしてください。")
-        mask = self.project.parts[index].mask
+        mask = self.edit_mask(index, hidden)
         value = 0 if erase else 255
         cv2.line(mask, start, end, value, thickness=2 * radius + 1)
         cv2.circle(mask, start, radius, value, thickness=-1)
         cv2.circle(mask, end, radius, value, thickness=-1)
 
-    def polygon(self, index: int, points: list[tuple[int, int]], erase: bool = False) -> None:
+    def polygon(self, index: int, points: list[tuple[int, int]], erase: bool = False,
+                hidden: bool = False) -> None:
         if len(points) >= 3:
             self.checkpoint()
-            cv2.fillPoly(self.project.parts[index].mask,
+            cv2.fillPoly(self.edit_mask(index, hidden),
                          [np.asarray(points, dtype=np.int32)], 0 if erase else 255)
 
     def proposal(self, backend: SegmentationBackend) -> np.ndarray:
@@ -93,3 +95,56 @@ class Editor:
             raise ValueError("マスクの寸法・形式が不正です。")
         self.checkpoint()
         self.project.parts[index].mask = mask.copy()
+
+    def edit_mask(self, index: int, hidden: bool = False) -> np.ndarray:
+        part = self.project.parts[index]
+        if not hidden:
+            return part.mask
+        if part.hidden_mask is None:
+            part.hidden_mask = np.zeros_like(part.mask)
+        return part.hidden_mask
+
+    def accept_parts(self, proposal: PartsProposal) -> None:
+        # Add proposals; never discard existing manual parts.
+        candidate = self.project.snapshot()
+        names = {p.name.casefold() for p in candidate.parts}
+        for part in proposal.parts:
+            name = part.name
+            suffix = 2
+            while name.casefold() in names:
+                name = f"{part.name}_{suffix}"
+                suffix += 1
+            names.add(name.casefold())
+            candidate.parts.append(Part(name, part.mask.copy(), part.kind))
+        errors = validate(candidate)
+        if errors or not proposal.parts:
+            raise ValueError("\n".join(errors) or "分割候補がありません。")
+        self.checkpoint()
+        candidate.history.append({"operation": "auto-parts", **proposal.metadata})
+        self.project = candidate
+
+    def repair_mask(self, index: int) -> np.ndarray:
+        part = self.project.parts[index]
+        mask = part.hidden_mask
+        if mask is None or not np.any(mask):
+            raise ValueError("補完領域モードで、隠れた領域を描いてください。")
+        if np.any((mask > 0) & (part.mask > 0)):
+            raise ValueError("補完領域が原画の可視マスクと重なっています。可視領域の外側だけを指定してください。")
+        return mask.copy()
+
+    def accept_repair(self, index: int, proposal: RepairProposal) -> None:
+        requested = self.repair_mask(index)
+        if (proposal.pixels.shape != self.project.source.shape or proposal.pixels.dtype != np.uint8
+                or proposal.mask.shape != requested.shape or proposal.mask.dtype != np.uint8
+                or not np.array_equal(proposal.mask, requested)):
+            raise ValueError("補完候補の寸法・領域が不正です。")
+        self.checkpoint()
+        part = self.project.parts[index]
+        # Retain previous repairs outside the newly selected target.
+        generated = part.generated.copy() if part.generated is not None else np.zeros_like(self.project.source)
+        coverage = part.generated_mask.copy() if part.generated_mask is not None else np.zeros_like(part.mask)
+        generated[requested > 0] = proposal.pixels[requested > 0]
+        coverage[requested > 0] = requested[requested > 0]
+        generated.flags.writeable = coverage.flags.writeable = False
+        part.generated, part.generated_mask = generated, coverage
+        self.project.history.append({"operation": "inpaint", "part_id": part.id, **proposal.metadata})

@@ -1,6 +1,8 @@
 """Exercise the generated character without relying on semantic AI labels."""
 
 from pathlib import Path
+import hashlib
+import json
 
 import numpy as np
 from PIL import Image
@@ -29,3 +31,14 @@ def test_original_character_roundtrip(tmp_path):
     with Image.open(exported / "preview.png") as preview:
         assert np.array_equal(np.array(preview), project.source)
     assert path.read_bytes() == before
+
+
+def test_committed_sample_artifact_integrity():
+    root = Path(__file__).parents[1] / "samples" / "results"
+    report = json.loads((root / "report.json").read_text())
+    assert report["inpainting"]["ai"] is True
+    assert report["checks"]["cubism_validation"] == "not_run"
+    for relative, expected in report["artifacts_sha256"].items():
+        path = root / relative
+        assert path.resolve().is_relative_to(root.resolve())
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == expected

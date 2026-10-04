@@ -1,0 +1,87 @@
+{
+  "source": "original_character.png",
+  "source_sha256": "03c118c9069f501e51e841cb9152510e5f60e1cc6f215a51591ae21297928442",
+  "automatic": {
+    "backend": "color-clusters-v1",
+    "requested_count": 8,
+    "actual_count": 8,
+    "semantic_labels": false,
+    "canvas": [
+      1254,
+      1254
+    ]
+  },
+  "inpainting": {
+    "backend": "big-lama-torchscript",
+    "ai": true,
+    "model_sha256": "344c77bbcb158f17dd143070d1e789f38a66c04202311ae3a258ef66667a9ea9",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "crop": [
+      436,
+      116,
+      664,
+      344
+    ],
+    "inference_size": [
+      228,
+      228
+    ],
+    "padding": [
+      4,
+      4
+    ],
+    "scale": [
+      1.0,
+      1.0
+    ],
+    "offset": [
+      436,
+      116
+    ]
+  },
+  "inpainting_purpose": "Synthetic occlusion of a visible hair patch; not ground-truth hidden anatomy",
+  "checks": {
+    "split_reconstruction_exact": true,
+    "psd_reconstruction_exact": true,
+    "repair_visible_source_preserved": true,
+    "project_roundtrips": true,
+    "cubism_validation": "not_run"
+  },
+  "artifacts_sha256": {
+    "automatic/mask_01.png": "1fa8f2016076f89e4d5eafdaffcc741cbff8c7a6812b91ed995b2d8f1dcfe1af",
+    "automatic/mask_02.png": "33ee59ae7e56b9b3e93fddaa4e01e54ff87dc229e0767685b6a0517e4c403686",
+    "automatic/mask_03.png": "23222133ec14c22200b9f79a07367379cfcd4eb771f619e213af9847bf93b4d6",
+    "automatic/mask_04.png": "b8508910ec40f59271262a9114a086e7ffaf3debf5b25b331fc01d06275f74b9",
+    "automatic/mask_05.png": "39cf7ae7849ff704426ed26a48162b6490c3731f7dd9866821cbaa984a277e9d",
+    "automatic/mask_06.png": "7ed080b2ab518c0ae97b6757e20e81ad550f4a4762b9ad60ba007b7209d13599",
+    "automatic/mask_07.png": "2ab1a02a426c92d9e77ab8e2d7f505764ffc0b44dab014ab606e6fdac8669d14",
+    "automatic/mask_08.png": "ad9a927cc4a0579f464fb39a6250350fb91f21b46dbaacb443c1448487c5b83b",
+    "automatic/parts.psd": "cf381c8a7ff4bbda2421182a31b4ab6eadbf87dfd636af23f9d6c988c3093d0e",
+    "automatic/png/manifest.json": "6a6e6385ca3f811e1685b7d458949f39da8c765b02b244255dae8cd52ed7278b",
+    "automatic/png/parts/000_color_region_01.png": "c246bb619b55f3469b8f49a8a90dbff907c8b26eadee98b70ffbe94738f4659c",
+    "automatic/png/parts/001_color_region_02.png": "93321aec6bf9e657f1dacb4cf278f5bf119493ea47a753a80cdc693a0086134d",
+    "automatic/png/parts/002_color_region_03.png": "098245eeb7174c685c2c8fc99fe419a962d3d15ea4e2a6be50be05b862f903b0",
+    "automatic/png/parts/003_color_region_04.png": "a797a9629caa964f48a6f956e1d6456d9d73697e393bf30fa8b5cf6dec0ef61e",
+    "automatic/png/parts/004_color_region_05.png": "e5858497d005be78b4fbe25dcdd67e69c541ba83b42672ed75af2b2a0ae6a549",
+    "automatic/png/parts/005_color_region_06.png": "1210b940cced8f8ee137d12f30871ffc15076e731080e37bfd556507d6c5193e",
+    "automatic/png/parts/006_color_region_07.png": "a0a2a578007b2e899cf061730f3487653e02be048882042aa8f6fe043d52cb53",
+    "automatic/png/parts/007_color_region_08.png": "2007b8176b861e62ee003a80c0c3b62041a0e2d6c90d5ab8b63b70c0cabd3dbe",
+    "automatic/png/preview.png": "7fe5bb62f94e5770a6cca3fe184e2ff733eaa4063c56cb31d814783b7c1e7c9d",
+    "automatic/project.l2split": "3a261b0a261f4a1bcc1ac6364e5b693ab60c636d4f2009f0232b6d5ea4e16f0b",
+    "automatic/segmentation_overlay.png": "beecbd9e2b8fb644020137657a84c41160d41c78e038e1b29fed67ba89e3e360",
+    "inpainting/after.png": "40b7f3a77ac672fc99dae05049b6100444536f4c75af3f7d1b996fa0ac9ee808",
+    "inpainting/before.l2split": "38eb118534b67cb6e3a414a5737d3e768c4117e397dff8c5af60e4a5a2e32b75",
+    "inpainting/before.png": "4b9db5d757e05259b94094bd0217283e58126767873981ff161196e0be2d6f76",
+    "inpainting/generated_mask.png": "c50ccb86c716c873208798df51ec4bde6e747cb72a5b941a63d8f5da05fc2d06",
+    "inpainting/parts.psd": "5573ea27b0d39b59a44b0d16d08a6b99128f1b4a3e0584549361bb787bfda3ef",
+    "inpainting/png/manifest.json": "095fc7dc9b4ad0390688ad1d3a9d905f898d80ab31f82fd1e99e724774d6a24f",
+    "inpainting/png/parts/000_synthetic_occlusion_demo.png": "40b7f3a77ac672fc99dae05049b6100444536f4c75af3f7d1b996fa0ac9ee808",
+    "inpainting/png/parts/000_synthetic_occlusion_demo_generated_mask.png": "c50ccb86c716c873208798df51ec4bde6e747cb72a5b941a63d8f5da05fc2d06",
+    "inpainting/png/preview.png": "40b7f3a77ac672fc99dae05049b6100444536f4c75af3f7d1b996fa0ac9ee808",
+    "inpainting/project.l2split": "f9ee251af64f0f3003f914af1a57c9e3404f4983728c5d5d014d97e01aa70081",
+    "inpainting/target_mask.png": "c50ccb86c716c873208798df51ec4bde6e747cb72a5b941a63d8f5da05fc2d06"
+  }
+}

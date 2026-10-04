@@ -12,7 +12,21 @@ dependencies = [
   "Pillow>=11,<13",
   "opencv-python-headless>=4.10,<6",
   "PySide6>=6.8,<7",
+  "psd-tools>=1.23,<2",
 ]
+
+[project.optional-dependencies]
+ai = ["torch>=2.6,<3"]
+
+[tool.uv.sources]
+torch = [
+  { index = "pytorch-cpu", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
 
 [dependency-groups]
 dev = ["pytest>=8,<10"]
@@ -23,4 +37,4 @@ live2d-semi-auto = "live2d_semi_auto.__main__:main"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
-
+markers = ["ai: explicitly enabled tests using a verified local model"]

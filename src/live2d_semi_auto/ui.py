@@ -1,20 +1,25 @@
 """Desktop view; all edits go through application services."""
 
+import os
 from pathlib import Path
 
 import numpy as np
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QThread, Signal
 from PySide6.QtGui import QAction, QColor, QImage, QKeySequence, QPainterPath, QPen, QPixmap
 from PySide6.QtWidgets import (
     QCheckBox, QComboBox, QFileDialog, QFormLayout, QGraphicsPathItem,
     QGraphicsPixmapItem, QGraphicsScene, QGraphicsView, QHBoxLayout, QInputDialog,
     QLabel, QLineEdit, QListWidget, QMainWindow, QMessageBox, QPushButton,
     QSlider, QSpinBox, QSplitter, QVBoxLayout, QWidget,
+    QProgressDialog,
 )
 
 from .application import Editor
 from .core import composite, layer_pixels, validate
-from .inference import AlphaBackend
+from .exporters import PsdExporter
+from .gpt_parts import GPTPartsBackend
+from .inference import AlphaBackend, ColorPartsBackend
+from .inpainting import LaMaBackend, TeleaBackend
 from .infrastructure import export_png, import_image, load_project, save_project
 
 
@@ -23,6 +28,23 @@ def pixmap(pixels: np.ndarray) -> QPixmap:
     height, width = pixels.shape[:2]
     image = QImage(pixels.data, width, height, pixels.strides[0], QImage.Format_RGBA8888)
     return QPixmap.fromImage(image.copy())
+
+
+class Worker(QThread):
+    completed = Signal(object)
+    failed = Signal(str)
+
+    def __init__(self, operation, parent):
+        super().__init__(parent)
+        self.operation = operation
+
+    def run(self):
+        try:
+            result = self.operation()
+        except Exception as exc:
+            self.failed.emit(str(exc))
+        else:
+            self.completed.emit(result)
 
 
 class Canvas(QGraphicsView):
@@ -81,7 +103,8 @@ class Canvas(QGraphicsView):
 
     def paint_to(self, point):
         self.window.editor.paint(self.window.index(), self.previous, point,
-                                 self.window.radius.value(), self.window.tool.currentIndex() == 1)
+                                 self.window.radius.value(), self.window.tool.currentIndex() == 1,
+                                 hidden=self.window.target.currentIndex() == 1)
         self.previous = point
         self.window.refresh_canvas()
 
@@ -116,7 +139,8 @@ class Canvas(QGraphicsView):
             if self.points and self.editable():
                 self.points.append(self.point(event))
                 self.window.editor.polygon(self.window.index(), self.points,
-                                           self.window.tool.currentIndex() == 3)
+                                           self.window.tool.currentIndex() == 3,
+                                           hidden=self.window.target.currentIndex() == 1)
                 self.outline.setPath(QPainterPath())
             self.previous, self.points = None, []
             self.window.refresh_canvas()
@@ -128,15 +152,18 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.editor: Editor | None = None
         self.project_path: Path | None = None
+        self.worker = None
+        self.job_cancelled = False
         self.resize(1200, 800)
         self.setWindowTitle("Live2D Semi-Auto")
-        toolbar = self.addToolBar("ファイル・編集")
+        toolbar = self.toolbar = self.addToolBar("ファイル・編集")
         for title, shortcut, handler in [
             ("画像を読み込む", "Ctrl+N", self.open_image),
             ("プロジェクトを開く", "Ctrl+O", self.open_project),
             ("保存", "Ctrl+S", self.save),
             ("名前を付けて保存", "Ctrl+Shift+S", lambda: self.save(True)),
             ("PNG出力", "Ctrl+E", self.export),
+            ("PSD出力", "Ctrl+Shift+E", self.export_psd),
             ("Undo", "Ctrl+Z", lambda: self.history(False)),
             ("Redo", "Ctrl+Shift+Z", lambda: self.history(True)),
             ("全体表示", "Ctrl+0", self.fit),
@@ -164,6 +191,9 @@ class MainWindow(QMainWindow):
             ("奥へ移動 ↑", lambda: self.move_part(-1)),
             ("手前へ移動 ↓", lambda: self.move_part(1)),
             ("不透明領域のマスク候補", self.propose),
+            ("自動パーツ分割（色領域）", self.auto_parts),
+            ("GPTでパーツ候補（外部送信）", self.gpt_parts),
+            ("隠れ領域を補完", self.repair),
         ]:
             button = QPushButton(title)
             button.clicked.connect(lambda checked=False, handler=fn: self.run(handler))
@@ -181,6 +211,9 @@ class MainWindow(QMainWindow):
         self.mode.currentIndexChanged.connect(self.refresh_canvas)
         self.tool = QComboBox()
         self.tool.addItems(["ブラシ追加", "ブラシ消去", "なげなわ追加", "なげなわ消去"])
+        self.target = QComboBox()
+        self.target.addItems(["可視マスク", "補完領域"])
+        self.target.currentIndexChanged.connect(self.refresh_canvas)
         self.radius = QSpinBox()
         self.radius.setRange(1, 200)
         self.radius.setValue(12)
@@ -189,7 +222,7 @@ class MainWindow(QMainWindow):
         self.opacity.setValue(45)
         self.opacity.valueChanged.connect(self.refresh_canvas)
         controls = QHBoxLayout()
-        for widget in (self.mode, self.tool, QLabel("半径(px)"), self.radius,
+        for widget in (self.mode, self.target, self.tool, QLabel("半径(px)"), self.radius,
                        QLabel("マスク濃度"), self.opacity):
             controls.addWidget(widget)
         self.canvas = Canvas(self)
@@ -289,8 +322,145 @@ class MainWindow(QMainWindow):
         if ok:
             if not name.strip() or name in {".", ".."} or "/" in name or "\\" in name:
                 raise ValueError("フォルダー名だけを入力してください。")
-            export_png(editor.project, Path(parent) / name)
-            self.statusBar().showMessage("透過PNG・manifest・プレビューを出力しました。")
+            snapshot = editor.project.snapshot()
+            self.background("PNG出力中…", lambda: export_png(snapshot, Path(parent) / name),
+                            lambda _: self.statusBar().showMessage("PNG出力が完了しました。"), cancellable=False)
+
+    def export_psd(self):
+        editor = self.require()
+        chosen, _ = QFileDialog.getSaveFileName(self, "新しいPSDファイルへ出力", "parts.psd", "PSD (*.psd)")
+        if chosen:
+            path = Path(chosen)
+            if not path.suffix:
+                path = path.with_suffix(".psd")
+            snapshot = editor.project.snapshot()
+            self.background("PSD出力中…", lambda: PsdExporter().export(snapshot, path),
+                            lambda _: self.statusBar().showMessage("PSD出力が完了しました。Cubismでの確認は別途必要です。"),
+                            cancellable=False)
+
+    def background(self, title, operation, on_result, *, cancellable=True):
+        if self.worker is not None:
+            raise ValueError("実行中の処理が完了してから再試行してください。")
+        self.job_cancelled = False
+        self.centralWidget().setEnabled(False)
+        self.toolbar.setEnabled(False)
+        progress = QProgressDialog(title, "結果を破棄" if cancellable else "", 0, 0, self)
+        progress.setWindowModality(Qt.WindowModal)
+        progress.setMinimumDuration(0)
+        if not cancellable:
+            progress.setCancelButton(None)
+            progress.setWindowFlag(Qt.WindowCloseButtonHint, False)
+        progress.canceled.connect(lambda: setattr(self, "job_cancelled", True))
+        worker = self.worker = Worker(operation, self)
+
+        def receive(result):
+            progress.hide()
+            if self.job_cancelled:
+                self.statusBar().showMessage("結果を破棄しました。編集中のデータは変更していません。")
+            else:
+                self.run(lambda: on_result(result))
+
+        def failed(message):
+            progress.hide()
+            if not self.job_cancelled:
+                QMessageBox.warning(self, "処理を完了できませんでした", f"{message}\n編集内容は保持されています。")
+
+        def finished():
+            self.centralWidget().setEnabled(True)
+            self.toolbar.setEnabled(True)
+            progress.deleteLater()
+            worker.deleteLater()
+            self.worker = None
+
+        worker.completed.connect(receive)
+        worker.failed.connect(failed)
+        worker.finished.connect(finished)
+        worker.start()
+
+    def confirm_pixels(self, title, text, pixels):
+        dialog = QMessageBox(self)
+        dialog.setWindowTitle(title)
+        dialog.setText(text)
+        dialog.setIconPixmap(pixmap(pixels).scaled(480, 480, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        dialog.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        dialog.setDefaultButton(QMessageBox.No)
+        return dialog.exec() == QMessageBox.Yes
+
+    def auto_parts(self):
+        editor = self.require()
+        count, ok = QInputDialog.getInt(self, "自動パーツ分割", "色領域の候補数（意味的な髪・顔分類ではありません）", 8, 2, 16)
+        if not ok:
+            return
+        source = editor.project.source
+
+        def show(proposal):
+            preview = source.copy()
+            for i, part in enumerate(proposal.parts):
+                color = np.array([(i * 79 + 50) % 256, (i * 131 + 90) % 256, (i * 193 + 130) % 256])
+                preview[part.mask > 0, :3] = (preview[part.mask > 0, :3] * 0.35 + color * 0.65).astype(np.uint8)
+            if self.confirm_pixels("自動分割候補", f"{len(proposal.parts)}個の色領域候補を追加しますか？\n既存の手動パーツは保持します。採用後に修正・Undoできます。", preview):
+                editor.accept_parts(proposal)
+                self.refresh()
+
+        self.background("色領域の候補を計算中…", lambda: ColorPartsBackend(count).propose_parts(source), show)
+
+    def repair(self):
+        editor = self.require_part()
+        index = self.index()
+        mask = editor.repair_mask(index)
+        selected, ok = QInputDialog.getItem(self, "補完方法", "ローカル補完バックエンド",
+                                           ["LaMa（AI・モデルが必要）", "Telea（画像処理・AIではありません）"], 0, False)
+        if not ok:
+            return
+        if selected.startswith("LaMa"):
+            path = os.environ.get("LAMA_MODEL_PATH")
+            if not path:
+                path, _ = QFileDialog.getOpenFileName(self, "取得済みのLaMaモデルを選択", "", "TorchScript (*.pt)")
+            if not path:
+                return
+            backend = LaMaBackend(path)
+        else:
+            backend = TeleaBackend()
+        source = editor.project.source
+
+        def show(proposal):
+            temporary = editor.project.snapshot()
+            temporary.parts[index].generated = proposal.pixels
+            temporary.parts[index].generated_mask = proposal.mask
+            before = layer_pixels(editor.project, editor.project.parts[index])
+            after = layer_pixels(temporary, temporary.parts[index])
+            comparison = np.concatenate((before, after), axis=1)
+            if self.confirm_pixels("補完候補：左=現在／右=候補", "生成結果を採用しますか？\n原画の可視領域は保持され、Undoできます。", comparison):
+                editor.accept_repair(index, proposal)
+                self.mode.setCurrentIndex(2)
+                self.refresh_canvas()
+
+        self.background("隠れ領域を補完中…", lambda: backend.propose(source, mask), show)
+
+    def gpt_parts(self):
+        editor = self.require()
+        backend = GPTPartsBackend()
+        if not backend.api_key:
+            raise ValueError("環境設定で GPT_API_KEY を設定してください。キーをチャットに貼らないでください。")
+        answer = QMessageBox.question(
+            self, "OpenAIへの画像送信", f"原画を最大1024pxに縮小して api.openai.com に送信します。\n"
+            f"モデル: {backend.model}\n画像からパーツの分類・位置候補を得ます。APIの利用料金が発生します。送信しますか？",
+            QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if answer != QMessageBox.Yes:
+            return
+        source = editor.project.source
+
+        def show(proposal):
+            preview = source.copy()
+            for i, part in enumerate(proposal.parts):
+                tint = np.array([(i * 79 + 50) % 256, (i * 131 + 90) % 256, (i * 193 + 130) % 256])
+                preview[part.mask > 0, :3] = (preview[part.mask > 0, :3] * 0.4 + tint * 0.6).astype(np.uint8)
+            names = "、".join(p.name for p in proposal.parts)
+            if self.confirm_pixels("GPT候補の確認", f"{names}\n分類・位置をGPTで提案し、GrabCutでマスク化した候補です。\n輪郭・名称・順序は要確認です。追加しますか？", preview):
+                editor.accept_parts(proposal)
+                self.refresh()
+
+        self.background("GPTの分類・位置候補を取得中…", lambda: backend.propose_parts(source), show)
 
     def add_part(self):
         self.require().add_part()
@@ -377,10 +547,15 @@ class MainWindow(QMainWindow):
         else:
             pixels = project.source.copy()
             if mode == 1 and index >= 0:
-                alpha = project.parts[index].mask[..., None].astype(np.float32) / 255
+                part = project.parts[index]
+                mask = part.hidden_mask if self.target.currentIndex() == 1 else part.mask
+                if mask is None:
+                    mask = np.zeros_like(part.mask)
+                alpha = mask[..., None].astype(np.float32) / 255
                 alpha *= self.opacity.value() / 100
+                tint = [255, 140, 40] if self.target.currentIndex() == 1 else [40, 220, 170]
                 pixels[..., :3] = np.rint(pixels[..., :3] * (1 - alpha)
-                                          + np.array([40, 220, 170]) * alpha).astype(np.uint8)
+                                          + np.array(tint) * alpha).astype(np.uint8)
                 pixels[..., 3] = np.maximum(pixels[..., 3], (alpha[..., 0] * 255).astype(np.uint8))
         self.canvas.show_pixels(pixels)
         label = self.project_path.name if self.project_path else project.source_name
@@ -391,4 +566,8 @@ class MainWindow(QMainWindow):
             self.canvas.fitInView(self.canvas.picture.boundingRect(), Qt.KeepAspectRatio)
 
     def closeEvent(self, event):
+        if self.worker is not None:
+            event.ignore()
+            self.statusBar().showMessage("処理の完了または結果の破棄後に閉じてください。")
+            return
         event.accept() if self.discard() else event.ignore()

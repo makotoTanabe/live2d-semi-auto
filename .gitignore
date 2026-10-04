@@ -205,6 +205,10 @@ cython_debug/
 # Temporary file for partial code execution
 tempCodeRunnerFile.py
 
+# Deliberately version the requested sample PNG packages.
+!/samples/results/**/parts/
+!/samples/results/**/parts/**
+
 # Ruff stuff:
 .ruff_cache/
 

@@ -16,7 +16,7 @@ from PIL import Image, ImageOps
 from .core import Part, Project, composite, layer_pixels, mask_bounds, validate
 
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 
 def import_image(path: str | Path) -> Project:
@@ -60,6 +60,7 @@ def save_project(project: Project, path: str | Path) -> None:
         "schema_version": SCHEMA_VERSION, "application_version": "0.1.0",
         "canvas": list(project.size), "source_name": project.source_name,
         "source_hash": project.source_hash, "source": "source.png", "parts": [],
+        "history": project.history,
     }
     temporary = None
     try:
@@ -70,10 +71,17 @@ def save_project(project: Project, path: str | Path) -> None:
             for order, part in enumerate(project.parts):
                 asset = f"masks/{order}.png"
                 archive.writestr(asset, _png(part.mask))
-                manifest["parts"].append({
+                item = {
                     "id": part.id, "name": part.name, "kind": part.kind,
                     "visible": part.visible, "z_order": order, "mask": asset,
-                })
+                }
+                for key, pixels in (("hidden_mask", part.hidden_mask),
+                                    ("generated", part.generated),
+                                    ("generated_mask", part.generated_mask)):
+                    if pixels is not None:
+                        item[key] = f"{key}/{order}.png"
+                        archive.writestr(item[key], _png(pixels, project.icc_profile if key == "generated" else None))
+                manifest["parts"].append(item)
             archive.writestr("manifest.json", json.dumps(manifest, ensure_ascii=False))
         with temporary.open("rb") as file:
             os.fsync(file.fileno())
@@ -87,7 +95,7 @@ def load_project(path: str | Path) -> Project:
     try:
         with zipfile.ZipFile(path) as archive:
             data = json.loads(archive.read("manifest.json"))
-            if type(data["schema_version"]) is not int or data["schema_version"] != SCHEMA_VERSION:
+            if type(data["schema_version"]) is not int or data["schema_version"] not in {1, SCHEMA_VERSION}:
                 raise ValueError("未対応のプロジェクト形式です。")
             with Image.open(io.BytesIO(archive.read(data["source"]))) as image:
                 source = np.array(image.convert("RGBA"))
@@ -106,11 +114,25 @@ def load_project(path: str | Path) -> Project:
                     if image.mode != "L":
                         raise ValueError("マスクは8bitグレースケールである必要があります。")
                     mask = np.array(image)
-                parts.append(Part(item["name"], mask, item["kind"], item["id"], item["visible"]))
+                part = Part(item["name"], mask, item["kind"], item["id"], item["visible"])
+                for key in ("hidden_mask", "generated", "generated_mask"):
+                    if key in item:
+                        with Image.open(io.BytesIO(archive.read(item[key]))) as image:
+                            if image.mode != ("RGBA" if key == "generated" else "L"):
+                                raise ValueError("生成データの画像形式が不正です。")
+                            pixels = np.array(image)
+                            if key in {"generated", "generated_mask"}:
+                                pixels.flags.writeable = False
+                            setattr(part, key, pixels)
+                parts.append(part)
             if not isinstance(data["source_name"], str) or not isinstance(data["source_hash"], str):
                 raise ValueError("原画情報が不正です。")
             source.flags.writeable = False
-            project = Project(source, data["source_name"], data["source_hash"], parts, profile)
+            history = data.get("history", [])
+            if not isinstance(history, list) or not all(isinstance(item, dict) for item in history):
+                raise ValueError("生成履歴が不正です。")
+            project = Project(source, data["source_name"], data["source_hash"], parts, profile,
+                              history=history)
             _check(project)
             return project
     except (KeyError, TypeError, json.JSONDecodeError, zipfile.BadZipFile) as exc:
@@ -128,15 +150,20 @@ def export_png(project: Project, directory: str | Path) -> None:
         (staging / "parts").mkdir()
         manifest = {"schema_version": SCHEMA_VERSION, "canvas": list(project.size),
                     "source_name": project.source_name, "source_hash": project.source_hash,
-                    "parts": []}
+                    "history": project.history, "parts": []}
         for order, part in enumerate(project.parts):
             safe = re.sub(r"[^\w-]+", "_", part.name, flags=re.UNICODE).strip("_")[:64] or "part"
             relative = f"parts/{order:03d}_{safe}.png"
             (staging / relative).write_bytes(_png(layer_pixels(project, part), project.icc_profile))
-            manifest["parts"].append({
+            item = {
                 "id": part.id, "name": part.name, "kind": part.kind, "z_order": order,
                 "visible": part.visible, "file": relative, "bounds": mask_bounds(part.mask),
-            })
+            }
+            if part.generated_mask is not None:
+                provenance = f"parts/{order:03d}_{safe}_generated_mask.png"
+                (staging / provenance).write_bytes(_png(part.generated_mask))
+                item["generated_mask"] = provenance
+            manifest["parts"].append(item)
         (staging / "preview.png").write_bytes(_png(composite(project), project.icc_profile))
         (staging / "manifest.json").write_text(
             json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")

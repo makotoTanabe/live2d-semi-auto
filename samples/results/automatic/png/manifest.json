@@ -1,0 +1,136 @@
+{
+  "schema_version": 2,
+  "canvas": [
+    1254,
+    1254
+  ],
+  "source_name": "original_character.png",
+  "source_hash": "03c118c9069f501e51e841cb9152510e5f60e1cc6f215a51591ae21297928442",
+  "history": [
+    {
+      "operation": "auto-parts",
+      "backend": "color-clusters-v1",
+      "requested_count": 8,
+      "actual_count": 8,
+      "semantic_labels": false,
+      "canvas": [
+        1254,
+        1254
+      ]
+    }
+  ],
+  "parts": [
+    {
+      "id": "700b2e09fcd05f7493e0857aaf4a1d39",
+      "name": "color_region_01",
+      "kind": "color_region",
+      "z_order": 0,
+      "visible": true,
+      "file": "parts/000_color_region_01.png",
+      "bounds": [
+        0,
+        0,
+        1254,
+        1254
+      ]
+    },
+    {
+      "id": "8931b26e4c735ba7bdd2c66e43855929",
+      "name": "color_region_02",
+      "kind": "color_region",
+      "z_order": 1,
+      "visible": true,
+      "file": "parts/001_color_region_02.png",
+      "bounds": [
+        91,
+        8,
+        1120,
+        1254
+      ]
+    },
+    {
+      "id": "f2038624607756929d58f46812e24a91",
+      "name": "color_region_03",
+      "kind": "color_region",
+      "z_order": 2,
+      "visible": true,
+      "file": "parts/002_color_region_03.png",
+      "bounds": [
+        90,
+        8,
+        1164,
+        1254
+      ]
+    },
+    {
+      "id": "b312973e6acf56a8bc0181ea7f6e35d2",
+      "name": "color_region_04",
+      "kind": "color_region",
+      "z_order": 3,
+      "visible": true,
+      "file": "parts/003_color_region_04.png",
+      "bounds": [
+        92,
+        7,
+        1164,
+        1254
+      ]
+    },
+    {
+      "id": "22b3c0b6aaff51498b5096edb9e18c78",
+      "name": "color_region_05",
+      "kind": "color_region",
+      "z_order": 4,
+      "visible": true,
+      "file": "parts/004_color_region_05.png",
+      "bounds": [
+        93,
+        8,
+        1163,
+        1254
+      ]
+    },
+    {
+      "id": "28977fa70e1651e59392e032922ca0af",
+      "name": "color_region_06",
+      "kind": "color_region",
+      "z_order": 5,
+      "visible": true,
+      "file": "parts/005_color_region_06.png",
+      "bounds": [
+        89,
+        6,
+        1165,
+        1254
+      ]
+    },
+    {
+      "id": "31959f92640955f8bfdc2e615390ecb6",
+      "name": "color_region_07",
+      "kind": "color_region",
+      "z_order": 6,
+      "visible": true,
+      "file": "parts/006_color_region_07.png",
+      "bounds": [
+        192,
+        63,
+        1061,
+        1247
+      ]
+    },
+    {
+      "id": "3f1be71c0a455546a500ee1a83d340af",
+      "name": "color_region_08",
+      "kind": "color_region",
+      "z_order": 7,
+      "visible": true,
+      "file": "parts/007_color_region_08.png",
+      "bounds": [
+        92,
+        7,
+        1158,
+        1254
+      ]
+    }
+  ]
+}

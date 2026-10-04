@@ -77,3 +77,49 @@ def test_entry_point_runs_event_loop(app):
     from live2d_semi_auto.__main__ import main
     QTimer.singleShot(100, app.quit)
     assert main() == 0
+
+
+def wait_for_worker(window):
+    for _ in range(200):
+        QTest.qWait(10)
+        if window.worker is None:
+            return
+    raise AssertionError("background job did not finish")
+
+
+def test_background_success_and_cancel_keep_ui_responsive(window):
+    import threading
+    result = []
+    ready = threading.Event()
+    window.background("testing", lambda: ready.wait(2) or 42, result.append)
+    assert not window.centralWidget().isEnabled()
+    window.job_cancelled = True
+    ready.set()
+    wait_for_worker(window)
+    assert result == []
+    assert window.centralWidget().isEnabled()
+    window.background("testing", lambda: 42, result.append)
+    wait_for_worker(window)
+    assert result == [42]
+
+
+def test_gui_hidden_mask_painting(window):
+    window.add_part()
+    window.target.setCurrentIndex(1)
+    window.radius.setValue(1)
+    pos = window.canvas.mapFromScene(5, 5)
+    QTest.mouseClick(window.canvas.viewport(), Qt.LeftButton, pos=pos)
+    assert not np.any(window.editor.project.parts[0].mask)
+    assert window.editor.project.parts[0].hidden_mask[5, 5] == 255
+
+
+def test_gpt_image_upload_requires_explicit_confirmation(window, monkeypatch):
+    class Backend:
+        api_key = "test-token"
+        model = "test-model"
+        def propose_parts(self, source):
+            pytest.fail("declined artwork must not be sent")
+    monkeypatch.setattr("live2d_semi_auto.ui.GPTPartsBackend", Backend)
+    monkeypatch.setattr(QMessageBox, "question", lambda *a: QMessageBox.No)
+    window.gpt_parts()
+    assert window.worker is None
