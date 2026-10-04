@@ -209,6 +209,9 @@ tempCodeRunnerFile.py
 !/samples/results/**/parts/
 !/samples/results/**/parts/**
 
+# Browser automation dependencies; the Web app itself has no Node build.
+node_modules/
+
 # Ruff stuff:
 .ruff_cache/
 

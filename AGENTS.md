@@ -2,13 +2,13 @@
 
 ## Project
 
-This repository contains a semi-automatic Live2D illustration parts-separation tool.
+This repository contains a semi-automatic illustration parts editor and a browser-embeddable animated 2D character runtime.
 
 Read `docs/SPEC.md` before making architectural or product decisions.
 
-The primary goal is to reduce manual Live2D material-separation work while keeping the workflow editable by a human.
+The primary goal is to create editable, animated characters for Web applications, reusing the parts-separation workflow. The current Web milestone is defined in `docs/SPEC.md` and ADR 0003.
 
-This is NOT a project for fully automatic Live2D model generation.
+Automatic results remain proposals; part roles, animation settings, masks and ordering must be editable by a human.
 
 ---
 
@@ -261,9 +261,11 @@ Any remote inference integration must clearly identify itself as remote.
 
 ---
 
-# PSD / Live2D Constraints
+# Web Model / PSD Constraints
 
-The target is compatibility with Live2D Cubism.
+The target is an animated 2D character that can be embedded in a Web application. Do not make Cubism SDK, `.moc3`, or Cubism compatibility a prerequisite for this milestone.
+
+Keep browser rendering and Web bundle export behind adapters. Preserve stable part IDs, layer order, alpha, source artwork, and editable parameter bindings. Verify expression/motion rendering in an actual browser and validate that exported bundles run independently of the editor server.
 
 PSD export should account for:
 
@@ -280,7 +282,7 @@ Keep PSD export behind an exporter abstraction.
 
 Do not couple project state to one PSD-writing library.
 
-Validate produced PSDs against actual Cubism behavior before declaring PSD export complete.
+PSD is an optional interchange export. Only claim compatibility with a specific external application after checking it there; this does not gate the Web model workflow.
 
 ---
 

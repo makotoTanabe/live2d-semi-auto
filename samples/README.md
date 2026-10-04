@@ -18,6 +18,8 @@ The automated sample test splits the canvas into two geometric regions to verify
 - `alignment_ui.png`: the current GUI displaying the nine-part alignment project.
 - `manual_ui.png`: screenshot of the earlier manual-editing slice.
 - `current_ui.png`: screenshot of the current app with the automatic sample loaded.
+- `results/web/`: real Chromium editor checks, downloaded project/PNG/PSD/Web packages, screenshots, a recorded animation, and an independently served character bundle. The report distinguishes passed checks from a local-file check blocked by browser policy. The editable test project includes intentional mask edits and color proposals; `character-web.zip` contains the nine-part animated sample before those edits.
+- `results/web_lama/`: real CPU LaMa through the Web API, including the input project, two proposals, rejection and adoption states, original/visible/hidden/generated pixels, saved and reloaded projects, and a report with artifact hashes. All ten checks passed; the synthetic 10,000-pixel withheld region was filled while source and visible pixels remained unchanged.
 
 All example artwork and derived images/data are stored in this repository. The optional approximately 196 MiB model is a dependency stored outside the checkout; it is obtained explicitly through [docs/MODELS.md](../docs/MODELS.md).
 
@@ -39,3 +41,12 @@ uv run --locked python scripts/create_alignment_sample.py \
 ```
 
 The offline replay was verified to reproduce identical composited pixels and part IDs. For a new live request, replace `--response ...` with `--upload`; the API key is read from `GPT_API_KEY` / `OPENAI_API_KEY` or a hidden prompt. `--response-log /new/path.json` can retain a response for diagnosis even when its proposal is rejected. The GUI requires separate upload and adoption confirmations. Keys are never included in these artifacts.
+
+For Web playback, extract [character-web.zip](results/web/character-web.zip) and serve its directory with any static HTTP server. The [recorded motion](results/web/character_motion.webm) shows the exported model playing independently of the editor. Embedding instructions and browser-check reproduction are in [docs/WEB.md](../docs/WEB.md). The sample still needs artwork cleanup and has no separate arm parts; playback does not supply missing anatomy.
+
+With the Web server running with `LAMA_MODEL_PATH` and both `web` and `ai` extras, reproduce the Web repair check into a new directory:
+
+```bash
+uv run --locked --extra web --extra ai python scripts/check_web_lama.py \
+  --base-url http://127.0.0.1:8080 --output /tmp/new-web-lama-check
+```

@@ -1,0 +1,60 @@
+{
+  "schema_version": 3,
+  "application_version": "0.1.0",
+  "canvas": [
+    1254,
+    1254
+  ],
+  "source_name": "original_character.png",
+  "source_hash": "03c118c9069f501e51e841cb9152510e5f60e1cc6f215a51591ae21297928442",
+  "source": "source.png",
+  "parts": [
+    {
+      "id": "57492b8553855d78b87f8627019a31c7",
+      "name": "synthetic_occlusion_demo",
+      "kind": "demo",
+      "visible": true,
+      "z_order": 0,
+      "mask": "masks/0.png",
+      "hidden_mask": "hidden_mask/0.png",
+      "generated": "generated/0.png",
+      "generated_mask": "generated_mask/0.png"
+    }
+  ],
+  "history": [
+    {
+      "operation": "inpaint",
+      "part_id": "57492b8553855d78b87f8627019a31c7",
+      "backend": "big-lama-torchscript",
+      "ai": true,
+      "model_sha256": "344c77bbcb158f17dd143070d1e789f38a66c04202311ae3a258ef66667a9ea9",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "crop": [
+        436,
+        116,
+        664,
+        344
+      ],
+      "inference_size": [
+        228,
+        228
+      ],
+      "padding": [
+        4,
+        4
+      ],
+      "scale": [
+        1.0,
+        1.0
+      ],
+      "offset": [
+        436,
+        116
+      ]
+    }
+  ],
+  "assets": {}
+}

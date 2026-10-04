@@ -1,0 +1,46 @@
+{
+  "has_project": true,
+  "revision": 3,
+  "source_name": "original_character.png",
+  "source_hash": "03c118c9069f501e51e841cb9152510e5f60e1cc6f215a51591ae21297928442",
+  "size": [
+    1254,
+    1254
+  ],
+  "parts": [
+    {
+      "id": "57492b8553855d78b87f8627019a31c7",
+      "name": "synthetic_occlusion_demo",
+      "kind": "demo",
+      "visible": true,
+      "bounds": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "hidden_bounds": [
+        500,
+        180,
+        600,
+        280
+      ],
+      "generated": true,
+      "aligned": false,
+      "alignment": null
+    }
+  ],
+  "can_undo": false,
+  "can_redo": false,
+  "capabilities": {
+    "model": "gpt-5.6-luna",
+    "gpt_configured": false,
+    "lama_available": true
+  },
+  "active_job": null,
+  "runtime_config": {
+    "bindings": {},
+    "meshResolution": 4,
+    "strength": 1.0
+  }
+}

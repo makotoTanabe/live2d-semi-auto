@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Live2D Web Studio</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/runtime.js" defer></script>
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">◈</span><div><strong>Live2D Web Studio</strong><small>キャラクターを作って、Webで動かす</small></div></div>
+    <div class="toolbar">
+      <label class="button file-button">画像を開く<input id="image-input" data-testid="projectimage-input" type="file" accept="image/png,image/jpeg,image/webp"></label>
+      <label class="button file-button">プロジェクトを開く<input id="project-input" data-testid="project-input" type="file" accept=".l2split"></label>
+      <button id="export-project" data-testid="export-project" class="needs-project">保存</button>
+      <button id="export-web" data-testid="export-web" class="primary needs-project">Web用モデルを書き出す</button>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <aside class="panel parts-panel" aria-label="パーツ編集">
+      <div class="panel-heading"><h2>パーツ</h2><button id="add-part" data-testid="add-part" class="icon-button needs-project" title="パーツを追加" aria-label="パーツを追加">＋</button></div>
+      <p id="parts-count" class="hint">画像を読み込んで開始</p>
+      <ol id="part-list" data-testid="part-list" class="part-list" aria-label="パーツ一覧"></ol>
+      <div class="part-editor">
+        <label>名前<input id="part-name" data-testid="part-name" class="needs-part" maxlength="160" placeholder="パーツ名"></label>
+        <label>種類<input id="part-kind" data-testid="part-kind" class="needs-part" maxlength="80" placeholder="例: hair_front" list="part-types"></label>
+        <datalist id="part-types"><option value="face"><option value="hair_front"><option value="hair_back"><option value="eye_left"><option value="eye_right"><option value="mouth"><option value="body"><option value="arm_left"><option value="arm_right"><option value="accessory"></datalist>
+        <button id="apply-part" data-testid="apply-part" class="needs-part">変更を適用</button>
+        <label>動きの役割<select id="role-select" data-testid="role-select" class="needs-part"><option value="static">固定</option></select></label>
+        <p class="hint">顔・目・口などの役割を指定すると、表情と動きに反映されます。</p>
+        <div class="button-row"><button id="move-up" class="needs-part" title="手前へ">↑ 手前へ</button><button id="move-down" class="needs-part" title="奥へ">↓ 奥へ</button></div>
+        <button id="delete-part" class="subtle danger needs-part">パーツを削除</button>
+      </div>
+      <details class="secondary-export"><summary>素材を書き出す</summary><div class="button-row"><button id="export-png" data-testid="export-png" class="needs-project">PNG一式</button><button id="export-psd" data-testid="export-psd" class="needs-project">PSD</button></div></details>
+    </aside>
+
+    <section class="stage" aria-label="キャラクタープレビュー">
+      <div class="stage-toolbar">
+        <label class="inline-label">表示<select id="view-mode" data-testid="view-mode"><option value="live">アニメーション</option><option value="source">元画像</option><option value="overlay">マスク編集</option><option value="layer">選択パーツ</option><option value="composite">再合成</option><option value="difference">差分</option></select></label>
+        <div class="button-row"><button id="undo" data-testid="undo" title="Ctrl / ⌘ + Z">戻す</button><button id="redo" data-testid="redo" title="Ctrl / ⌘ + Shift + Z">やり直す</button><button id="fit" data-testid="fit">全体を表示</button><span id="zoom-label" class="hint">100%</span></div>
+      </div>
+      <div id="canvas-wrap" class="canvas-wrap">
+        <canvas id="editor-canvas" data-testid="editor-canvas" aria-label="キャラクター表示とマスク編集" tabindex="0"></canvas>
+        <div id="empty-state" class="empty-state"><div class="empty-symbol" aria-hidden="true">◈</div><h1>キャラクターに動きを。</h1><p>パーツを揃え、表情とモーションを確認。<br>完成したモデルは、そのままWebアプリに組み込めます。</p><button id="sample-alignment" data-testid="sample-alignment" class="primary large">サンプルを動かす</button><p class="hint">APIキーなしで試せます</p></div>
+        <div id="canvas-loading" class="canvas-loading" hidden>プレビューを準備しています…</div>
+      </div>
+      <div class="stage-footer"><span id="image-info">画像未読み込み</span><span id="stage-help">サンプルか画像を読み込んでください</span></div>
+    </section>
+
+    <aside class="panel controls-panel" aria-label="表情と制作ツール">
+      <section class="control-section animation-controls">
+        <div class="panel-heading"><h2>表情・モーション</h2><button id="playback" data-testid="playback" class="needs-project" aria-pressed="true">一時停止</button></div>
+        <label>表情<select id="expression" data-testid="expression" class="needs-project"><option value="neutral">通常</option><option value="smile">笑顔</option><option value="angry">怒り</option><option value="cry">泣き</option><option value="surprised">驚き</option><option value="shy">照れ</option></select></label>
+        <label>モーション<select id="motion" data-testid="motion" class="needs-project"><option value="idle">待機</option><option value="nod">うなずく</option><option value="shake">首振り</option><option value="greeting">挨拶</option></select></label>
+        <label class="check-label"><input id="idle" type="checkbox" checked class="needs-project">自然な動き</label>
+        <label class="check-label"><input id="auto-blink" type="checkbox" checked class="needs-project">自動まばたき</label>
+        <label class="check-label"><input id="pointer-tracking" type="checkbox" checked class="needs-project">マウスを目で追う</label>
+        <div class="slider-group"><label for="angle-x">顔の左右 <output id="angle-x-value">0</output></label><input id="angle-x" data-testid="angle-x" class="needs-project" type="range" min="-1" max="1" step="0.01" value="0"></div>
+        <div class="slider-group"><label for="angle-y">顔の上下 <output id="angle-y-value">0</output></label><input id="angle-y" class="needs-project" type="range" min="-1" max="1" step="0.01" value="0"></div>
+        <div class="slider-group"><label for="angle-z">顔の傾き <output id="angle-z-value">0</output></label><input id="angle-z" class="needs-project" type="range" min="-1" max="1" step="0.01" value="0"></div>
+        <div class="slider-group"><label for="eye-open">目の開き <output id="eye-open-value">1</output></label><input id="eye-open" data-testid="eye-open" class="needs-project" type="range" min="0" max="1" step="0.01" value="1"></div>
+        <div class="slider-group"><label for="mouth-open">口の開き <output id="mouth-open-value">0</output></label><input id="mouth-open" data-testid="mouth-open" class="needs-project" type="range" min="0" max="1" step="0.01" value="0"></div>
+        <div class="slider-group"><label for="breath">呼吸 <output id="breath-value">0.5</output></label><input id="breath" class="needs-project" type="range" min="0" max="1" step="0.01" value="0.5"></div>
+        <button id="reset-motion" class="subtle needs-project">パラメータをリセット</button>
+      </section>
+
+      <details id="mask-controls" class="tool-section"><summary>マスクを修正</summary>
+        <label>ツール<select id="mask-tool" data-testid="mask-tool"><option value="brush">ブラシ</option><option value="lasso">投げ縄</option></select></label>
+        <div class="button-row segmented"><button id="mask-add" class="active" aria-pressed="true">追加</button><button id="mask-erase" aria-pressed="false">消す</button></div>
+        <label>編集対象<select id="mask-target" data-testid="mask-target"><option value="visible">見えている部分</option><option value="hidden">隠れた部分</option></select></label>
+        <div class="slider-group"><label for="brush-radius">ブラシ半径 <output id="brush-radius-value">12 px</output></label><input id="brush-radius" data-testid="brush-radius" type="range" min="1" max="120" value="12"></div>
+        <p class="hint">「マスク編集」表示で描画。ホイールで拡大、中ボタンで移動。</p>
+        <label>補完方法<select id="repair-backend"><option value="telea">周辺画素から補完（ローカル）</option><option value="lama">LaMa AI補完（ローカル）</option></select></label>
+        <button id="repair-part" class="needs-part">隠れた部分を補完</button>
+      </details>
+
+      <details class="tool-section"><summary>配置を調整</summary>
+        <p class="hint">現在の配置に対して、倍率・回転・移動を追加します。適用前に候補を確認できます。</p>
+        <label>倍率<input id="adjust-scale" class="needs-part" type="number" min="0.05" max="20" step="0.01" value="1"></label>
+        <label>角度（度）<input id="adjust-angle" class="needs-part" type="number" min="-360" max="360" step="1" value="0"></label>
+        <div class="two-fields"><label>横の移動<input id="adjust-x" class="needs-part" type="number" step="1" value="0"></label><label>縦の移動<input id="adjust-y" class="needs-part" type="number" step="1" value="0"></label></div>
+        <button id="apply-adjustment" class="needs-part">配置を適用</button>
+      </details>
+
+      <details class="tool-section"><summary>パーツ分割・AI位置合わせ</summary>
+        <label>色のグループ数<input id="color-count" type="number" min="2" max="16" value="8"></label>
+        <button id="auto-color" data-testid="auto-color" class="needs-project">色でパーツ候補を作る</button>
+        <p class="hint">色でまとめる処理です。部位の意味は判別しません。</p>
+        <hr>
+        <label>GPTモデル<input id="gpt-model" autocomplete="off" spellcheck="false" placeholder="モデル名"></label>
+        <label>APIキー<input id="api-key" type="password" autocomplete="off" spellcheck="false" placeholder="環境設定済みなら空欄でOK"></label>
+        <p id="gpt-status" class="hint">キーはブラウザーに保存しません。</p>
+        <button id="propose-gpt" data-testid="propose-gpt" class="needs-project">GPTでパーツを推定</button>
+        <label class="file-field">分割パーツの配置図<input id="atlas-input" data-testid="atlas-input" type="file" accept="image/png,image/jpeg,image/webp"></label>
+        <label>配置図の背景<select id="atlas-background"><option value="white">白背景</option><option value="alpha">透過背景</option></select></label>
+        <button id="propose-alignment" data-testid="propose-alignment" class="needs-project">GPTで位置を揃える</button>
+        <p class="hint">送信前に画像・送信先・API料金を確認します。候補は確認後に採用します。</p>
+      </details>
+
+      <details class="tool-section"><summary>サンプルを開く</summary><button id="load-alignment" class="wide">配置済みキャラクター</button><button id="sample-automatic" class="wide">色分割サンプル</button><button id="sample-original" class="wide">元のキャラクター画像</button></details>
+    </aside>
+  </main>
+
+  <footer class="statusbar"><span id="status" role="status" aria-live="polite">接続しています…</span><span id="save-status">ローカル処理・原画を保持</span></footer>
+  <div id="error-banner" class="error-banner" role="alert" hidden><span id="error-message"></span><button id="dismiss-error" aria-label="エラーを閉じる">×</button></div>
+
+  <dialog id="proposal-dialog" class="proposal-dialog">
+    <div class="dialog-heading"><h2 id="proposal-title">候補を確認</h2><button id="job-reject-top" aria-label="候補を閉じる">×</button></div>
+    <p id="job-message" class="hint">処理しています。編集状態は保持されています。</p>
+    <div class="proposal-previews"><figure><figcaption>現在の元画像</figcaption><img id="proposal-source" alt="現在の元画像"></figure><figure><figcaption>候補の再合成</figcaption><img id="proposal-image" alt="AIまたは画像処理の候補"></figure></div>
+    <div id="proposal-parts" class="proposal-parts"></div>
+    <details><summary>推定の詳細</summary><pre id="proposal-metadata"></pre></details>
+    <div class="dialog-actions"><button id="job-reject" data-testid="job-reject">処理を中止・候補を破棄</button><button id="job-accept" data-testid="job-accept" class="primary" disabled>候補を採用</button></div>
+  </dialog>
+</body>
+</html>

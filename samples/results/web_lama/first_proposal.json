@@ -1,0 +1,61 @@
+{
+  "id": "pq2RIDEaJ6yxlsvVXg0gMmu_",
+  "kind": "repair",
+  "status": "ready",
+  "message": "候補を確認し、採用または破棄してください。",
+  "parts": [
+    {
+      "id": "57492b8553855d78b87f8627019a31c7",
+      "name": "synthetic_occlusion_demo",
+      "kind": "demo",
+      "visible": true,
+      "bounds": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "hidden_bounds": [
+        500,
+        180,
+        600,
+        280
+      ],
+      "generated": true,
+      "aligned": false,
+      "alignment": null
+    }
+  ],
+  "metadata": {
+    "backend": "big-lama-torchscript",
+    "ai": true,
+    "model_sha256": "344c77bbcb158f17dd143070d1e789f38a66c04202311ae3a258ef66667a9ea9",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "crop": [
+      436,
+      116,
+      664,
+      344
+    ],
+    "inference_size": [
+      228,
+      228
+    ],
+    "padding": [
+      4,
+      4
+    ],
+    "scale": [
+      1.0,
+      1.0
+    ],
+    "offset": [
+      436,
+      116
+    ]
+  },
+  "preview_url": "/api/jobs/pq2RIDEaJ6yxlsvVXg0gMmu_/preview.png"
+}

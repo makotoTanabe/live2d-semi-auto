@@ -1,0 +1,254 @@
+{
+  "version": 1,
+  "startedAt": "2026-10-04T22:45:07.808Z",
+  "status": "passed",
+  "browser": "Chromium",
+  "checks": [
+    {
+      "name": "editor bootstrap",
+      "status": "passed",
+      "durationMs": 414
+    },
+    {
+      "name": "sample renders real character textures",
+      "status": "passed",
+      "durationMs": 1752,
+      "details": {
+        "parts": 9,
+        "frame": {
+          "hash": "486e8771",
+          "nontransparent": 310923,
+          "sampledColors": 5511,
+          "width": 1082,
+          "height": 895
+        }
+      }
+    },
+    {
+      "name": "animation controls change rendered pixels",
+      "status": "passed",
+      "durationMs": 2167,
+      "details": {
+        "frames": {
+          "angle-x": "d72eba12",
+          "eye-open": "2e619f3e",
+          "mouth-open": "c2fc57d1",
+          "cry": "eb1fe4d3"
+        },
+        "motionFrames": [
+          "fd692ecf",
+          "a42bf7d5"
+        ]
+      }
+    },
+    {
+      "name": "runtime preserves opaque and translucent alpha without mesh seams",
+      "status": "passed",
+      "durationMs": 29,
+      "details": {
+        "cases": [
+          {
+            "alpha": 255,
+            "role": "static",
+            "mismatchedPixels": 0,
+            "maxDifference": 0,
+            "tolerance": 0
+          },
+          {
+            "alpha": 255,
+            "role": "face",
+            "mismatchedPixels": 0,
+            "maxDifference": 0,
+            "tolerance": 0
+          },
+          {
+            "alpha": 255,
+            "role": "hair_back",
+            "mismatchedPixels": 0,
+            "maxDifference": 0,
+            "tolerance": 1
+          },
+          {
+            "alpha": 255,
+            "role": "body",
+            "mismatchedPixels": 0,
+            "maxDifference": 0,
+            "tolerance": 0
+          },
+          {
+            "alpha": 128,
+            "role": "static",
+            "mismatchedPixels": 0,
+            "maxDifference": 0,
+            "tolerance": 0
+          },
+          {
+            "alpha": 128,
+            "role": "face",
+            "mismatchedPixels": 0,
+            "maxDifference": 0,
+            "tolerance": 0
+          },
+          {
+            "alpha": 128,
+            "role": "hair_back",
+            "mismatchedPixels": 0,
+            "maxDifference": 1,
+            "tolerance": 1
+          },
+          {
+            "alpha": 128,
+            "role": "body",
+            "mismatchedPixels": 0,
+            "maxDifference": 0,
+            "tolerance": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "animated model downloads as a standalone Web bundle",
+      "status": "passed",
+      "durationMs": 759,
+      "details": {
+        "bytes": 1495122
+      }
+    },
+    {
+      "name": "image and project upload through real file controls",
+      "status": "passed",
+      "durationMs": 2323
+    },
+    {
+      "name": "default relative adjustment preserves aligned artwork and can be undone",
+      "status": "passed",
+      "durationMs": 7352
+    },
+    {
+      "name": "brush add erase undo redo preserve stable part IDs",
+      "status": "passed",
+      "durationMs": 9092
+    },
+    {
+      "name": "lasso and hidden masks are editable independently",
+      "status": "passed",
+      "durationMs": 2666
+    },
+    {
+      "name": "rename role visibility and order remain editable",
+      "status": "passed",
+      "durationMs": 9293
+    },
+    {
+      "name": "declining remote upload creates no inference request",
+      "status": "passed",
+      "durationMs": 301
+    },
+    {
+      "name": "color proposals are previewed rejected and explicitly accepted",
+      "status": "passed",
+      "durationMs": 11438,
+      "details": {
+        "originalParts": 10,
+        "adoptedParts": 18
+      }
+    },
+    {
+      "name": "all export downloads and project round trip preserve edits",
+      "status": "passed",
+      "durationMs": 25339,
+      "details": {
+        "parts": 18,
+        "stableIdsPreserved": true,
+        "masksPreserved": true
+      }
+    },
+    {
+      "name": "exported model runs on an independent HTTP server",
+      "status": "passed",
+      "durationMs": 9255,
+      "details": {
+        "parts": 9,
+        "independentServer": true,
+        "responsiveCanvases": [
+          {
+            "viewport": {
+              "width": 1600,
+              "height": 1100
+            },
+            "css": {
+              "width": 900,
+              "height": 715
+            },
+            "backing": {
+              "width": 900,
+              "height": 715
+            },
+            "devicePixelRatio": 1,
+            "frameHashes": [
+              "b53763d4",
+              "e55bf0c1"
+            ]
+          },
+          {
+            "viewport": {
+              "width": 880,
+              "height": 680
+            },
+            "css": {
+              "width": 840,
+              "height": 442
+            },
+            "backing": {
+              "width": 840,
+              "height": 442
+            },
+            "devicePixelRatio": 1,
+            "frameHashes": [
+              "2bd9d0e5",
+              "f0702191"
+            ]
+          }
+        ],
+        "frameHashes": [
+          "b53763d4",
+          "bfc64fbb",
+          "4af47eb8",
+          "849df26d",
+          "849df26d",
+          "417997d3"
+        ],
+        "recording": "character_motion.webm"
+      }
+    },
+    {
+      "name": "exported model also opens directly as a local file",
+      "status": "skipped",
+      "durationMs": 57,
+      "details": {
+        "skipped": "This Chromium installation blocks file:// navigation by policy; the independent HTTP bundle passed."
+      }
+    },
+    {
+      "name": "browser has no unexpected API failures or JavaScript errors",
+      "status": "passed",
+      "durationMs": 0
+    }
+  ],
+  "artifacts": [
+    "editor_expression.png",
+    "character-web.zip",
+    "edited-project.l2split",
+    "edited-png.zip",
+    "edited-layers.psd",
+    "editor_mask.png",
+    "standalone_expression.png",
+    "character_motion.webm"
+  ],
+  "consoleErrors": [],
+  "unexpectedResponses": [],
+  "remoteInferenceRequests": 0,
+  "finishedAt": "2026-10-04T22:46:31.100Z",
+  "passedChecks": 15,
+  "skippedChecks": 1
+}

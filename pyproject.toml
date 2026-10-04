@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "live2d-semi-auto"
 version = "0.1.0"
-description = "Human-editable Live2D illustration parts separation"
+description = "Editable illustration parts and embeddable animated Web characters"
 requires-python = ">=3.12"
 dependencies = [
   "numpy>=2.0,<3",
@@ -17,6 +17,11 @@ dependencies = [
 
 [project.optional-dependencies]
 ai = ["torch>=2.6,<3"]
+web = [
+  "fastapi>=0.115,<1",
+  "uvicorn>=0.30,<1",
+  "python-multipart>=0.0.18,<1",
+]
 
 [tool.uv.sources]
 torch = [
@@ -29,10 +34,11 @@ url = "https://download.pytorch.org/whl/cpu"
 explicit = true
 
 [dependency-groups]
-dev = ["pytest>=8,<10"]
+dev = ["pytest>=8,<10", "httpx>=0.28,<1"]
 
 [project.scripts]
 live2d-semi-auto = "live2d_semi_auto.__main__:main"
+live2d-semi-auto-web = "live2d_semi_auto.web:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

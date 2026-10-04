@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "checked_at_utc": "2026-10-04T22:47:38.332523+00:00",
+  "python_tests": {
+    "passed": 185,
+    "failed": 0,
+    "skipped": 0,
+    "warnings": [
+      "Starlette httpx test-client deprecation",
+      "PyTorch torch.jit.load deprecation"
+    ],
+    "real_lama_enabled": true
+  },
+  "browser": {
+    "passed": 15,
+    "failed": 0,
+    "skipped": 1,
+    "skip_reason": "Managed Chromium rejects file:// with ERR_BLOCKED_BY_ADMINISTRATOR",
+    "independent_http_playback": true,
+    "responsive_dimensions_checked": true,
+    "external_inference_requests": 0
+  },
+  "web_lama": {
+    "passed_checks": 10,
+    "target_pixels": 10000,
+    "model_sha256": "344c77bbcb158f17dd143070d1e789f38a66c04202311ae3a258ef66667a9ea9",
+    "visible_source_pixels_preserved": true
+  },
+  "build": {
+    "wheel_and_sdist": "passed",
+    "web_static_assets_in_wheel": true
+  },
+  "credentials": "not included in samples or exports",
+  "material_quality": "Sample has missing arms and imperfect atlas geometry; runtime does not supply missing artwork.",
+  "artifacts_sha256": {
+    "samples/results/web/character-web.zip": "c2fee451ff7e44d93e611530002d3b4e353b44ce8c295683e5596a434db89074",
+    "samples/results/web/character_motion.webm": "411bf8d06200bc4cde04f1abe666fc236eef8d5763f3e9d6ecb8035ec6fab480",
+    "samples/results/web/edited-layers.psd": "b765639a59e89e65dfd814670d88ebc193def924f60f4f6dd590e18578359fa0",
+    "samples/results/web/edited-png.zip": "0bf70107066cdef316d1baa42246c93cb0e623af3fff21958a8200ebdde62b11",
+    "samples/results/web/edited-project.l2split": "18a684a2bc67a5e5c90befa1440eb66f89dd81d07737a051c889fa85f4914b81",
+    "samples/results/web/editor_expression.png": "09c49723ec78c87daad9da615df788d2355d01321a8b6cd4e5082a6fa9f19db2",
+    "samples/results/web/editor_mask.png": "7c5006e5c74a0e61c45bee3d91fb63583172a1f476ff14f2f09d3d41c339335e",
+    "samples/results/web/report.json": "6cca2d42ec45a7d52abd0f4adab44730769309ee2f840c0ac4c968e4eef967d9",
+    "samples/results/web/standalone/README.md": "45fe6483db12c8b06b20ed2f43d7da43a49774eddcdce0004716eb9b764b3dd0",
+    "samples/results/web/standalone/index.html": "fa1f82ef0a15e52ada7bb0b39b01c5f1dfb4ed9d37d12fa189c2f481d00206c5",
+    "samples/results/web/standalone/model.json": "5635a1b7240b0fe648d301a7a98438cdb9f1b3fcfeb3246798aa68306fb3dd47",
+    "samples/results/web/standalone/parts/056bc1073107c1c45510caa1de604525.png": "212d8302cff51df17cb73ff14238c5b4cac2558f4feec99dfaafe47ddb894cdf",
+    "samples/results/web/standalone/parts/3536745fd32e9e41f7780148f91b73cf.png": "ebca314fc939d9a4286ba6d7bb01ed36784d0811be9d3898b300a86b34769de6",
+    "samples/results/web/standalone/parts/3ea839fbab82fe815d19492b9cc4e4f9.png": "1867abadca45774d50bbe921a4e91725f3ee6c2d0755f325b66b02e5d482d0e9",
+    "samples/results/web/standalone/parts/69b29edeab07ac54f75b57186dea67f6.png": "5b14147ed7694191808d03ab15cd56a1173864c6591ebadf7d9a59cc8db4b67e",
+    "samples/results/web/standalone/parts/958065968b8988cc91b5a38e60228ef7.png": "fb5e6374653bf456193b677376d0bbbd375d3d4e7e6774dc4f1edbab0ff7af49",
+    "samples/results/web/standalone/parts/aefe801e280eca7979f1c252d12012cc.png": "1e417541d65c4ec7542bda83606d5036cfe66a1ebd751cf8c7cf8bb5378d422a",
+    "samples/results/web/standalone/parts/eab8b42b7cc873495a9a168ecc64afa8.png": "6e88b3259c62623303128926afc3584c27f4759e807fda246d713165ebd80633",
+    "samples/results/web/standalone/parts/efda1639d637de5fc2036d6fa7a93f40.png": "9afae04b008793dd8b91f9ee08d462cd694e30ccd9a417bafa540fb6404864a9",
+    "samples/results/web/standalone/parts/f32fe42f89bce823a682b8b561414419.png": "103815958ce5231da0859c25b139d1aaa88b90ff93631586b43c1f06835d4be0",
+    "samples/results/web/standalone/runtime.js": "a0ac7a134ff53ab5ec0b362eb59a671970115f5810fb22480fb457ff507d8174",
+    "samples/results/web/standalone_expression.png": "c69b309125b126ec4ddaacc0f843347e9c0b9bfeade48cc3306fd9b4e757cf4f",
+    "samples/results/web_lama/accepted.l2split": "f249e49eb53562334eb831d86f609efec904a87fae117c9346f9e68c8a469059",
+    "samples/results/web_lama/accepted_manifest.json": "7f270fd8dd5cf4e349dd69bba93f3535470e63ab5fac7f57db4fbf49a42e61e7",
+    "samples/results/web_lama/accepted_preview.png": "40b7f3a77ac672fc99dae05049b6100444536f4c75af3f7d1b996fa0ac9ee808",
+    "samples/results/web_lama/accepted_state.json": "34e2b3afb94e59cc3bbdb2e2db527a69916971601aa5a8a2dda2518fcc0c89f0",
+    "samples/results/web_lama/after.png": "40b7f3a77ac672fc99dae05049b6100444536f4c75af3f7d1b996fa0ac9ee808",
+    "samples/results/web_lama/after_rejection.png": "5bb92bdc3da31b7e3ffd8625af70ff9a79647f24e7f52cb1dbe9c486ea4fb84e",
+    "samples/results/web_lama/before.png": "5bb92bdc3da31b7e3ffd8625af70ff9a79647f24e7f52cb1dbe9c486ea4fb84e",
+    "samples/results/web_lama/first_preview.png": "40b7f3a77ac672fc99dae05049b6100444536f4c75af3f7d1b996fa0ac9ee808",
+    "samples/results/web_lama/first_proposal.json": "452add349acb02c160933b2408191a93160b133e6be3cdc780abb133bd8cba6e",
+    "samples/results/web_lama/generated.png": "2342442f575ecf3d39c604945b93489542337a36aaf6561d31daa2ea3288c166",
+    "samples/results/web_lama/generated_mask.png": "c50ccb86c716c873208798df51ec4bde6e747cb72a5b941a63d8f5da05fc2d06",
+    "samples/results/web_lama/hidden_mask.png": "c50ccb86c716c873208798df51ec4bde6e747cb72a5b941a63d8f5da05fc2d06",
+    "samples/results/web_lama/initial_state.json": "e4f0cd2671873f74ca78bd806468eeb4101dd5e6545e6b6eec51084071997681",
+    "samples/results/web_lama/input.l2split": "38eb118534b67cb6e3a414a5737d3e768c4117e397dff8c5af60e4a5a2e32b75",
+    "samples/results/web_lama/rejected_state.json": "e4f0cd2671873f74ca78bd806468eeb4101dd5e6545e6b6eec51084071997681",
+    "samples/results/web_lama/reloaded_state.json": "a735dc76bf3fbcb383e6026cd75baa3f18fba4008a8ce3d00d1eb8ece8b710cc",
+    "samples/results/web_lama/report.json": "f38f232e72350cc1a68fee407970eb11318d6f92392d6c987b16720b72df9f43",
+    "samples/results/web_lama/roundtrip.l2split": "98ca3f40407e540737d317199bd2c62f23ffac508c7a8b933082bd9c655f5e5a",
+    "samples/results/web_lama/roundtrip.png": "40b7f3a77ac672fc99dae05049b6100444536f4c75af3f7d1b996fa0ac9ee808",
+    "samples/results/web_lama/second_proposal.json": "016461a24f2476542910c493979971c44247ca31457b50244764b05a0771f9f1",
+    "samples/results/web_lama/source.png": "7fe5bb62f94e5770a6cca3fe184e2ff733eaa4063c56cb31d814783b7c1e7c9d",
+    "samples/results/web_lama/source_after.png": "7fe5bb62f94e5770a6cca3fe184e2ff733eaa4063c56cb31d814783b7c1e7c9d",
+    "samples/results/web_lama/visible_mask.png": "820285370ce9c4186f11a044e6cebfd18f382d70ca9a25acc4c81aaff7251bcb"
+  }
+}

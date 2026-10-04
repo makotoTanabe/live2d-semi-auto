@@ -10,6 +10,38 @@ jobs:
       - uses: astral-sh/setup-uv@v6
         with:
           python-version: '3.12'
-      - run: uv sync --locked
-      - run: uv run --locked pytest -q
+      - run: uv sync --locked --extra web
+      - run: uv run --locked --extra web pytest -q
       - run: uv build
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: uv sync --locked --extra web
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npx playwright install --with-deps chromium
+      - name: Check editor and independent character bundle
+        run: |
+          uv run --locked --extra web live2d-semi-auto-web --port 8080 > /tmp/live2d-web.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:8080/api/health > /dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:8080/api/health
+          npm run test:web -- --url http://127.0.0.1:8080 --output /tmp/live2d-web-check
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-check
+          path: |
+            /tmp/live2d-web-check
+            /tmp/live2d-web.log

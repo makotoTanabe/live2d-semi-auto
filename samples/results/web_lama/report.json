@@ -1,0 +1,81 @@
+{
+  "checked_at_utc": "2026-10-04T22:36:01.863005+00:00",
+  "transport": "localhost HTTP Web API; no external AI endpoint",
+  "fixture": "samples/results/inpainting/before.l2split",
+  "purpose": "Synthetic withholding of visible hair pixels; not ground-truth hidden anatomy",
+  "source_hash": "03c118c9069f501e51e841cb9152510e5f60e1cc6f215a51591ae21297928442",
+  "part_id": "57492b8553855d78b87f8627019a31c7",
+  "size": [
+    1254,
+    1254
+  ],
+  "target_pixels": 10000,
+  "inpainting": {
+    "backend": "big-lama-torchscript",
+    "ai": true,
+    "model_sha256": "344c77bbcb158f17dd143070d1e789f38a66c04202311ae3a258ef66667a9ea9",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "crop": [
+      436,
+      116,
+      664,
+      344
+    ],
+    "inference_size": [
+      228,
+      228
+    ],
+    "padding": [
+      4,
+      4
+    ],
+    "scale": [
+      1.0,
+      1.0
+    ],
+    "offset": [
+      436,
+      116
+    ]
+  },
+  "elapsed_seconds": 15.291,
+  "checks": {
+    "true_local_neural_inference": true,
+    "preview_not_auto_adopted": true,
+    "rejection_preserved_state": true,
+    "accepted_matches_preview": true,
+    "source_pixels_and_hash_preserved": true,
+    "visible_pixels_preserved": true,
+    "hidden_region_filled": true,
+    "stable_part_id": true,
+    "generated_pixels_masks_history_roundtrip": true,
+    "input_archive_unchanged": true
+  },
+  "artifacts_sha256": {
+    "accepted.l2split": "f249e49eb53562334eb831d86f609efec904a87fae117c9346f9e68c8a469059",
+    "accepted_manifest.json": "7f270fd8dd5cf4e349dd69bba93f3535470e63ab5fac7f57db4fbf49a42e61e7",
+    "accepted_preview.png": "40b7f3a77ac672fc99dae05049b6100444536f4c75af3f7d1b996fa0ac9ee808",
+    "accepted_state.json": "34e2b3afb94e59cc3bbdb2e2db527a69916971601aa5a8a2dda2518fcc0c89f0",
+    "after.png": "40b7f3a77ac672fc99dae05049b6100444536f4c75af3f7d1b996fa0ac9ee808",
+    "after_rejection.png": "5bb92bdc3da31b7e3ffd8625af70ff9a79647f24e7f52cb1dbe9c486ea4fb84e",
+    "before.png": "5bb92bdc3da31b7e3ffd8625af70ff9a79647f24e7f52cb1dbe9c486ea4fb84e",
+    "first_preview.png": "40b7f3a77ac672fc99dae05049b6100444536f4c75af3f7d1b996fa0ac9ee808",
+    "first_proposal.json": "452add349acb02c160933b2408191a93160b133e6be3cdc780abb133bd8cba6e",
+    "generated.png": "2342442f575ecf3d39c604945b93489542337a36aaf6561d31daa2ea3288c166",
+    "generated_mask.png": "c50ccb86c716c873208798df51ec4bde6e747cb72a5b941a63d8f5da05fc2d06",
+    "hidden_mask.png": "c50ccb86c716c873208798df51ec4bde6e747cb72a5b941a63d8f5da05fc2d06",
+    "initial_state.json": "e4f0cd2671873f74ca78bd806468eeb4101dd5e6545e6b6eec51084071997681",
+    "input.l2split": "38eb118534b67cb6e3a414a5737d3e768c4117e397dff8c5af60e4a5a2e32b75",
+    "rejected_state.json": "e4f0cd2671873f74ca78bd806468eeb4101dd5e6545e6b6eec51084071997681",
+    "reloaded_state.json": "a735dc76bf3fbcb383e6026cd75baa3f18fba4008a8ce3d00d1eb8ece8b710cc",
+    "roundtrip.l2split": "98ca3f40407e540737d317199bd2c62f23ffac508c7a8b933082bd9c655f5e5a",
+    "roundtrip.png": "40b7f3a77ac672fc99dae05049b6100444536f4c75af3f7d1b996fa0ac9ee808",
+    "second_proposal.json": "016461a24f2476542910c493979971c44247ca31457b50244764b05a0771f9f1",
+    "source.png": "7fe5bb62f94e5770a6cca3fe184e2ff733eaa4063c56cb31d814783b7c1e7c9d",
+    "source_after.png": "7fe5bb62f94e5770a6cca3fe184e2ff733eaa4063c56cb31d814783b7c1e7c9d",
+    "visible_mask.png": "820285370ce9c4186f11a044e6cebfd18f382d70ca9a25acc4c81aaff7251bcb"
+  }
+}
