@@ -1,0 +1,1962 @@
+{
+  "source_sha256": "03c118c9069f501e51e841cb9152510e5f60e1cc6f215a51591ae21297928442",
+  "atlas_sha256": "82284584fd3ee330a4399eee65b690b07be71106c720b934c7c5be23154b3b37",
+  "metadata": {
+    "backend": "gpt-atlas-alignment",
+    "model": "gpt-5.6-luna",
+    "remote": true,
+    "source_size": [
+      1254,
+      1254
+    ],
+    "destination_size": [
+      1254,
+      1254
+    ],
+    "atlas_hash": "82284584fd3ee330a4399eee65b690b07be71106c720b934c7c5be23154b3b37",
+    "atlas_name": "parts_atlas.png",
+    "background_mode": "alpha",
+    "sent_sizes": {
+      "reference": [
+        1024,
+        1024
+      ],
+      "atlas": [
+        1024,
+        1024
+      ]
+    },
+    "quality": "unverified-proposals",
+    "parts": [
+      {
+        "id": "8fd11819cf4e561c839903b32d6c14a1",
+        "name": "maid_body",
+        "atlas_hash": "82284584fd3ee330a4399eee65b690b07be71106c720b934c7c5be23154b3b37",
+        "atlas_name": "parts_atlas.png",
+        "crop": [
+          746,
+          815,
+          1254,
+          1254
+        ],
+        "source_size": [
+          1254,
+          1254
+        ],
+        "destination_size": [
+          1254,
+          1254
+        ],
+        "canvas_size": [
+          1254,
+          1254
+        ],
+        "sent_sizes": {
+          "reference": [
+            1024,
+            1024
+          ],
+          "atlas": [
+            1024,
+            1024
+          ]
+        },
+        "preprocessing_scale": {
+          "reference": [
+            0.8165869218500797,
+            0.8165869218500797
+          ],
+          "atlas": [
+            0.8165869218500797,
+            0.8165869218500797
+          ]
+        },
+        "matrix": [
+          [
+            1.4989786190930128,
+            0.09560125289391276,
+            299.65151300558364
+          ],
+          [
+            -0.09560125289391276,
+            1.4989786190930128,
+            488.7158926869129
+          ]
+        ],
+        "initial_matrix": [
+          [
+            1.4989786190930128,
+            0.09560125289391276,
+            299.65151300558364
+          ],
+          [
+            -0.09560125289391276,
+            1.4989786190930128,
+            488.7158926869129
+          ]
+        ],
+        "initial_fit": {
+          "scale": 1.5020241343110574,
+          "rotation_degrees": -3.6492445712032624,
+          "offset": [
+            299.65151300558364,
+            488.7158926869129
+          ],
+          "anchor_residual_px": 32.7540090606708,
+          "anchor_max_residual_px": 42.02381202620207
+        },
+        "anchors": [
+          {
+            "source": [
+              690,
+              750
+            ],
+            "target": [
+              420,
+              520
+            ]
+          },
+          {
+            "source": [
+              850,
+              760
+            ],
+            "target": [
+              600,
+              520
+            ]
+          },
+          {
+            "source": [
+              805,
+              920
+            ],
+            "target": [
+              595,
+              790
+            ]
+          },
+          {
+            "source": [
+              700,
+              920
+            ],
+            "target": [
+              410,
+              790
+            ]
+          }
+        ],
+        "pivot_local": [
+          253.5,
+          219.0
+        ],
+        "source_anchors_px": [
+          [
+            865.26,
+            940.5
+          ],
+          [
+            1065.9,
+            953.04
+          ],
+          [
+            1009.47,
+            1153.68
+          ],
+          [
+            877.8,
+            1153.68
+          ]
+        ],
+        "target_anchors_px": [
+          [
+            526.68,
+            652.08
+          ],
+          [
+            752.4,
+            652.08
+          ],
+          [
+            746.13,
+            990.66
+          ],
+          [
+            514.14,
+            990.66
+          ]
+        ],
+        "normalized_bbox": [
+          595,
+          650,
+          1000,
+          1000
+        ],
+        "background_mode": "alpha",
+        "confidence": 0.96,
+        "notes": "Complete upper costume isolated; lower skirt is cropped and body edges are partially truncated by atlas bounds.",
+        "warnings": [
+          "anchor-mismatch"
+        ],
+        "quality": "unverified-proposal",
+        "backend": "gpt-atlas-alignment",
+        "model": "gpt-5.6-luna",
+        "transformed_crop_bbox": [
+          299.65151300558364,
+          440.15045621680525,
+          1103.1016015252617,
+          1146.7675064687455
+        ],
+        "manual_adjustments": [],
+        "scale": 1.5020241343110574,
+        "rotation_degrees": -3.6492445712032624,
+        "offset": [
+          299.65151300558364,
+          488.7158926869129
+        ],
+        "anchor_residual_px": 32.7540090606708,
+        "anchor_max_residual_px": 42.02381202620207
+      },
+      {
+        "id": "ace778d08e0b52a099e897ad50d1d855",
+        "name": "back_hair",
+        "atlas_hash": "82284584fd3ee330a4399eee65b690b07be71106c720b934c7c5be23154b3b37",
+        "atlas_name": "parts_atlas.png",
+        "crop": [
+          12,
+          25,
+          477,
+          483
+        ],
+        "source_size": [
+          1254,
+          1254
+        ],
+        "destination_size": [
+          1254,
+          1254
+        ],
+        "canvas_size": [
+          1254,
+          1254
+        ],
+        "sent_sizes": {
+          "reference": [
+            1024,
+            1024
+          ],
+          "atlas": [
+            1024,
+            1024
+          ]
+        },
+        "preprocessing_scale": {
+          "reference": [
+            0.8165869218500797,
+            0.8165869218500797
+          ],
+          "atlas": [
+            0.8165869218500797,
+            0.8165869218500797
+          ]
+        },
+        "matrix": [
+          [
+            1.20582035367139,
+            -0.005094273334114006,
+            331.9948296053402
+          ],
+          [
+            0.005094273334114006,
+            1.20582035367139,
+            4.029628762150082
+          ]
+        ],
+        "initial_matrix": [
+          [
+            1.20582035367139,
+            -0.005094273334114006,
+            331.9948296053402
+          ],
+          [
+            0.005094273334114006,
+            1.20582035367139,
+            4.029628762150082
+          ]
+        ],
+        "initial_fit": {
+          "scale": 1.205831114604777,
+          "rotation_degrees": 0.24205813438817064,
+          "offset": [
+            331.9948296053402,
+            4.029628762150082
+          ],
+          "anchor_residual_px": 43.30098540416305,
+          "anchor_max_residual_px": 57.40229745510519
+        },
+        "anchors": [
+          {
+            "source": [
+              55,
+              270
+            ],
+            "target": [
+              275,
+              290
+            ]
+          },
+          {
+            "source": [
+              190,
+              30
+            ],
+            "target": [
+              490,
+              55
+            ]
+          },
+          {
+            "source": [
+              350,
+              275
+            ],
+            "target": [
+              700,
+              295
+            ]
+          },
+          {
+            "source": [
+              190,
+              370
+            ],
+            "target": [
+              490,
+              420
+            ]
+          }
+        ],
+        "pivot_local": [
+          232.0,
+          228.5
+        ],
+        "source_anchors_px": [
+          [
+            68.97,
+            338.58
+          ],
+          [
+            238.26,
+            37.62
+          ],
+          [
+            438.9,
+            344.85
+          ],
+          [
+            238.26,
+            463.98
+          ]
+        ],
+        "target_anchors_px": [
+          [
+            344.85,
+            363.66
+          ],
+          [
+            614.46,
+            68.97
+          ],
+          [
+            877.8,
+            369.93
+          ],
+          [
+            614.46,
+            526.68
+          ]
+        ],
+        "normalized_bbox": [
+          10,
+          20,
+          380,
+          385
+        ],
+        "background_mode": "alpha",
+        "confidence": 0.9,
+        "notes": "Rear bob layer matches the rounded hair mass; maid headband is separate.",
+        "warnings": [
+          "anchor-mismatch"
+        ],
+        "quality": "unverified-proposal",
+        "backend": "gpt-atlas-alignment",
+        "model": "gpt-5.6-luna",
+        "transformed_crop_bbox": [
+          329.661652418316,
+          4.029628762150082,
+          892.7012940625366,
+          558.6641878440097
+        ],
+        "manual_adjustments": [],
+        "scale": 1.205831114604777,
+        "rotation_degrees": 0.24205813438817064,
+        "offset": [
+          331.9948296053402,
+          4.029628762150082
+        ],
+        "anchor_residual_px": 43.30098540416305,
+        "anchor_max_residual_px": 57.40229745510519
+      },
+      {
+        "id": "8cbd87246a895a23bdc80bc857ba8d22",
+        "name": "neck_face",
+        "atlas_hash": "82284584fd3ee330a4399eee65b690b07be71106c720b934c7c5be23154b3b37",
+        "atlas_name": "parts_atlas.png",
+        "crop": [
+          507,
+          81,
+          834,
+          527
+        ],
+        "source_size": [
+          1254,
+          1254
+        ],
+        "destination_size": [
+          1254,
+          1254
+        ],
+        "canvas_size": [
+          1254,
+          1254
+        ],
+        "sent_sizes": {
+          "reference": [
+            1024,
+            1024
+          ],
+          "atlas": [
+            1024,
+            1024
+          ]
+        },
+        "preprocessing_scale": {
+          "reference": [
+            0.8165869218500797,
+            0.8165869218500797
+          ],
+          "atlas": [
+            0.8165869218500797,
+            0.8165869218500797
+          ]
+        },
+        "matrix": [
+          [
+            1.1357224950370912,
+            0.002821021836798657,
+            457.5636015045449
+          ],
+          [
+            -0.002821021836798657,
+            1.1357224950370912,
+            103.81798244697521
+          ]
+        ],
+        "initial_matrix": [
+          [
+            1.1357224950370912,
+            0.002821021836798657,
+            457.5636015045449
+          ],
+          [
+            -0.002821021836798657,
+            1.1357224950370912,
+            103.81798244697521
+          ]
+        ],
+        "initial_fit": {
+          "scale": 1.1357259986006658,
+          "rotation_degrees": -0.14231673094322697,
+          "offset": [
+            457.5636015045449,
+            103.81798244697521
+          ],
+          "anchor_residual_px": 20.654173213837822,
+          "anchor_max_residual_px": 26.5294840362345
+        },
+        "anchors": [
+          {
+            "source": [
+              535,
+              75
+            ],
+            "target": [
+              510,
+              80
+            ]
+          },
+          {
+            "source": [
+              425,
+              230
+            ],
+            "target": [
+              410,
+              270
+            ]
+          },
+          {
+            "source": [
+              645,
+              230
+            ],
+            "target": [
+              625,
+              270
+            ]
+          },
+          {
+            "source": [
+              535,
+              340
+            ],
+            "target": [
+              510,
+              410
+            ]
+          }
+        ],
+        "pivot_local": [
+          163.0,
+          222.5
+        ],
+        "source_anchors_px": [
+          [
+            670.89,
+            94.05
+          ],
+          [
+            532.95,
+            288.42
+          ],
+          [
+            808.83,
+            288.42
+          ],
+          [
+            670.89,
+            426.36
+          ]
+        ],
+        "target_anchors_px": [
+          [
+            639.54,
+            100.32
+          ],
+          [
+            514.14,
+            338.58
+          ],
+          [
+            783.75,
+            338.58
+          ],
+          [
+            639.54,
+            514.14
+          ]
+        ],
+        "normalized_bbox": [
+          405,
+          65,
+          665,
+          420
+        ],
+        "background_mode": "alpha",
+        "confidence": 0.92,
+        "notes": "Blank face base with ears and neck; facial features are supplied separately.",
+        "warnings": [
+          "anchor-mismatch"
+        ],
+        "quality": "unverified-proposal",
+        "backend": "gpt-atlas-alignment",
+        "model": "gpt-5.6-luna",
+        "transformed_crop_bbox": [
+          457.5636015045449,
+          102.89550830634205,
+          830.203033120886,
+          610.3502152335179
+        ],
+        "manual_adjustments": [],
+        "scale": 1.1357259986006658,
+        "rotation_degrees": -0.14231673094322697,
+        "offset": [
+          457.5636015045449,
+          103.81798244697521
+        ],
+        "anchor_residual_px": 20.654173213837822,
+        "anchor_max_residual_px": 26.5294840362345
+      },
+      {
+        "id": "a2640f74c2c5597c84513a068de25692",
+        "name": "front_hair",
+        "atlas_hash": "82284584fd3ee330a4399eee65b690b07be71106c720b934c7c5be23154b3b37",
+        "atlas_name": "parts_atlas.png",
+        "crop": [
+          827,
+          25,
+          1254,
+          515
+        ],
+        "source_size": [
+          1254,
+          1254
+        ],
+        "destination_size": [
+          1254,
+          1254
+        ],
+        "canvas_size": [
+          1254,
+          1254
+        ],
+        "sent_sizes": {
+          "reference": [
+            1024,
+            1024
+          ],
+          "atlas": [
+            1024,
+            1024
+          ]
+        },
+        "preprocessing_scale": {
+          "reference": [
+            0.8165869218500797,
+            0.8165869218500797
+          ],
+          "atlas": [
+            0.8165869218500797,
+            0.8165869218500797
+          ]
+        },
+        "matrix": [
+          [
+            1.0722878625134264,
+            0.16691729323308255,
+            379.56207626208374
+          ],
+          [
+            -0.16691729323308255,
+            1.0722878625134264,
+            60.732288936627214
+          ]
+        ],
+        "initial_matrix": [
+          [
+            1.0722878625134264,
+            0.16691729323308255,
+            379.56207626208374
+          ],
+          [
+            -0.16691729323308255,
+            1.0722878625134264,
+            60.732288936627214
+          ]
+        ],
+        "initial_fit": {
+          "scale": 1.0852016600032788,
+          "rotation_degrees": -8.847916307339707,
+          "offset": [
+            379.56207626208374,
+            60.732288936627214
+          ],
+          "anchor_residual_px": 24.824208341776327,
+          "anchor_max_residual_px": 33.47358312985049
+        },
+        "anchors": [
+          {
+            "source": [
+              700,
+              90
+            ],
+            "target": [
+              345,
+              125
+            ]
+          },
+          {
+            "source": [
+              835,
+              35
+            ],
+            "target": [
+              505,
+              55
+            ]
+          },
+          {
+            "source": [
+              965,
+              180
+            ],
+            "target": [
+              665,
+              165
+            ]
+          },
+          {
+            "source": [
+              710,
+              330
+            ],
+            "target": [
+              385,
+              360
+            ]
+          },
+          {
+            "source": [
+              935,
+              350
+            ],
+            "target": [
+              670,
+              345
+            ]
+          }
+        ],
+        "pivot_local": [
+          205.5,
+          244.5
+        ],
+        "source_anchors_px": [
+          [
+            877.8,
+            112.86
+          ],
+          [
+            1047.09,
+            43.89
+          ],
+          [
+            1210.11,
+            225.72
+          ],
+          [
+            890.34,
+            413.82
+          ],
+          [
+            1172.49,
+            438.9
+          ]
+        ],
+        "target_anchors_px": [
+          [
+            432.63,
+            156.75
+          ],
+          [
+            633.27,
+            68.97
+          ],
+          [
+            833.91,
+            206.91
+          ],
+          [
+            482.79,
+            451.44
+          ],
+          [
+            840.18,
+            432.63
+          ]
+        ],
+        "normalized_bbox": [
+          660,
+          20,
+          1000,
+          410
+        ],
+        "background_mode": "alpha",
+        "confidence": 0.88,
+        "notes": "Front fringe and side locks correspond, though the atlas hair silhouette differs slightly from the dressed reference.",
+        "warnings": [
+          "anchor-mismatch",
+          "transformed-crop-outside-canvas"
+        ],
+        "quality": "unverified-proposal",
+        "backend": "gpt-atlas-alignment",
+        "model": "gpt-5.6-luna",
+        "transformed_crop_bbox": [
+          379.56207626208374,
+          -10.541395273899028,
+          919.2184672395272,
+          586.1533415682062
+        ],
+        "manual_adjustments": [],
+        "scale": 1.0852016600032788,
+        "rotation_degrees": -8.847916307339707,
+        "offset": [
+          379.56207626208374,
+          60.732288936627214
+        ],
+        "anchor_residual_px": 24.824208341776327,
+        "anchor_max_residual_px": 33.47358312985049
+      },
+      {
+        "id": "6695be46fb5a5c2e878f186665ff9a1b",
+        "name": "maid_headband",
+        "atlas_hash": "82284584fd3ee330a4399eee65b690b07be71106c720b934c7c5be23154b3b37",
+        "atlas_name": "parts_atlas.png",
+        "crop": [
+          18,
+          520,
+          471,
+          828
+        ],
+        "source_size": [
+          1254,
+          1254
+        ],
+        "destination_size": [
+          1254,
+          1254
+        ],
+        "canvas_size": [
+          1254,
+          1254
+        ],
+        "sent_sizes": {
+          "reference": [
+            1024,
+            1024
+          ],
+          "atlas": [
+            1024,
+            1024
+          ]
+        },
+        "preprocessing_scale": {
+          "reference": [
+            0.8165869218500797,
+            0.8165869218500797
+          ],
+          "atlas": [
+            0.8165869218500797,
+            0.8165869218500797
+          ]
+        },
+        "matrix": [
+          [
+            1.1391053880040665,
+            -0.0772619451033547,
+            387.93399017282275
+          ],
+          [
+            0.0772619451033547,
+            1.1391053880040665,
+            -32.72800948830904
+          ]
+        ],
+        "initial_matrix": [
+          [
+            1.1391053880040665,
+            -0.0772619451033547,
+            387.93399017282275
+          ],
+          [
+            0.0772619451033547,
+            1.1391053880040665,
+            -32.72800948830904
+          ]
+        ],
+        "initial_fit": {
+          "scale": 1.1417225990322906,
+          "rotation_degrees": 3.880249928536627,
+          "offset": [
+            387.93399017282275,
+            -32.72800948830904
+          ],
+          "anchor_residual_px": 26.739181757830192,
+          "anchor_max_residual_px": 34.986071513895624
+        },
+        "anchors": [
+          {
+            "source": [
+              55,
+              535
+            ],
+            "target": [
+              330,
+              105
+            ]
+          },
+          {
+            "source": [
+              175,
+              430
+            ],
+            "target": [
+              505,
+              28
+            ]
+          },
+          {
+            "source": [
+              345,
+              525
+            ],
+            "target": [
+              680,
+              110
+            ]
+          }
+        ],
+        "pivot_local": [
+          226.0,
+          153.5
+        ],
+        "source_anchors_px": [
+          [
+            68.97,
+            670.89
+          ],
+          [
+            219.45,
+            539.22
+          ],
+          [
+            432.63,
+            658.35
+          ]
+        ],
+        "target_anchors_px": [
+          [
+            413.82,
+            131.67
+          ],
+          [
+            633.27,
+            35.112
+          ],
+          [
+            852.72,
+            137.94
+          ]
+        ],
+        "normalized_bbox": [
+          15,
+          415,
+          375,
+          660
+        ],
+        "background_mode": "alpha",
+        "confidence": 0.94,
+        "notes": "Arched white ruffle headband; much of its inner opening is transparent.",
+        "warnings": [
+          "anchor-mismatch",
+          "transformed-crop-outside-canvas"
+        ],
+        "quality": "unverified-proposal",
+        "backend": "gpt-atlas-alignment",
+        "model": "gpt-5.6-luna",
+        "transformed_crop_bbox": [
+          364.1373110809895,
+          -32.72800948830904,
+          903.9487309386649,
+          353.1161111487631
+        ],
+        "manual_adjustments": [],
+        "scale": 1.1417225990322906,
+        "rotation_degrees": 3.880249928536627,
+        "offset": [
+          387.93399017282275,
+          -32.72800948830904
+        ],
+        "anchor_residual_px": 26.739181757830192,
+        "anchor_max_residual_px": 34.986071513895624
+      },
+      {
+        "id": "4b116e80500f5c39aac62b1e4e78a8a7",
+        "name": "visible_eye",
+        "atlas_hash": "82284584fd3ee330a4399eee65b690b07be71106c720b934c7c5be23154b3b37",
+        "atlas_name": "parts_atlas.png",
+        "crop": [
+          526,
+          608,
+          772,
+          772
+        ],
+        "source_size": [
+          1254,
+          1254
+        ],
+        "destination_size": [
+          1254,
+          1254
+        ],
+        "canvas_size": [
+          1254,
+          1254
+        ],
+        "sent_sizes": {
+          "reference": [
+            1024,
+            1024
+          ],
+          "atlas": [
+            1024,
+            1024
+          ]
+        },
+        "preprocessing_scale": {
+          "reference": [
+            0.8165869218500797,
+            0.8165869218500797
+          ],
+          "atlas": [
+            0.8165869218500797,
+            0.8165869218500797
+          ]
+        },
+        "matrix": [
+          [
+            0.4188188188188191,
+            -0.0864864864864866,
+            653.9204644644644
+          ],
+          [
+            0.0864864864864866,
+            0.4188188188188191,
+            299.6906286286286
+          ]
+        ],
+        "initial_matrix": [
+          [
+            0.4188188188188191,
+            -0.0864864864864866,
+            653.9204644644644
+          ],
+          [
+            0.0864864864864866,
+            0.4188188188188191,
+            299.6906286286286
+          ]
+        ],
+        "initial_fit": {
+          "scale": 0.42765536982664915,
+          "rotation_degrees": 11.667631922161625,
+          "offset": [
+            653.9204644644644,
+            299.6906286286286
+          ],
+          "anchor_residual_px": 11.219133918171826,
+          "anchor_max_residual_px": 14.962672655007445
+        },
+        "anchors": [
+          {
+            "source": [
+              460,
+              535
+            ],
+            "target": [
+              535,
+              262
+            ]
+          },
+          {
+            "source": [
+              550,
+              515
+            ],
+            "target": [
+              580,
+              255
+            ]
+          },
+          {
+            "source": [
+              570,
+              575
+            ],
+            "target": [
+              565,
+              292
+            ]
+          },
+          {
+            "source": [
+              475,
+              590
+            ],
+            "target": [
+              540,
+              295
+            ]
+          }
+        ],
+        "pivot_local": [
+          123.0,
+          76.0
+        ],
+        "source_anchors_px": [
+          [
+            576.84,
+            670.89
+          ],
+          [
+            689.7,
+            645.81
+          ],
+          [
+            714.78,
+            721.05
+          ],
+          [
+            595.65,
+            739.86
+          ]
+        ],
+        "target_anchors_px": [
+          [
+            670.89,
+            328.548
+          ],
+          [
+            727.32,
+            319.77
+          ],
+          [
+            708.51,
+            366.168
+          ],
+          [
+            677.16,
+            369.93
+          ]
+        ],
+        "normalized_bbox": [
+          420,
+          485,
+          615,
+          615
+        ],
+        "background_mode": "alpha",
+        "confidence": 0.84,
+        "notes": "Single visible eye; target is the character's image-right eye, with perspective and eyelid shape differences.",
+        "warnings": [],
+        "quality": "unverified-proposal",
+        "backend": "gpt-atlas-alignment",
+        "model": "gpt-5.6-luna",
+        "transformed_crop_bbox": [
+          639.7366806806806,
+          299.6906286286286,
+          756.9498938938939,
+          389.65259059059065
+        ],
+        "manual_adjustments": [],
+        "scale": 0.42765536982664915,
+        "rotation_degrees": 11.667631922161625,
+        "offset": [
+          653.9204644644644,
+          299.6906286286286
+        ],
+        "anchor_residual_px": 11.219133918171826,
+        "anchor_max_residual_px": 14.962672655007445
+      },
+      {
+        "id": "0d93531fd40c5856b50fd99fef72f71a",
+        "name": "neck_bow",
+        "atlas_hash": "82284584fd3ee330a4399eee65b690b07be71106c720b934c7c5be23154b3b37",
+        "atlas_name": "parts_atlas.png",
+        "crop": [
+          915,
+          539,
+          1223,
+          816
+        ],
+        "source_size": [
+          1254,
+          1254
+        ],
+        "destination_size": [
+          1254,
+          1254
+        ],
+        "canvas_size": [
+          1254,
+          1254
+        ],
+        "sent_sizes": {
+          "reference": [
+            1024,
+            1024
+          ],
+          "atlas": [
+            1024,
+            1024
+          ]
+        },
+        "preprocessing_scale": {
+          "reference": [
+            0.8165869218500797,
+            0.8165869218500797
+          ],
+          "atlas": [
+            0.8165869218500797,
+            0.8165869218500797
+          ]
+        },
+        "matrix": [
+          [
+            0.9097766457680251,
+            -0.015576018808777455,
+            497.3547795846394
+          ],
+          [
+            0.015576018808777455,
+            0.9097766457680251,
+            580.4998481583071
+          ]
+        ],
+        "initial_matrix": [
+          [
+            0.9097766457680251,
+            -0.015576018808777455,
+            497.3547795846394
+          ],
+          [
+            0.015576018808777455,
+            0.9097766457680251,
+            580.4998481583071
+          ]
+        ],
+        "initial_fit": {
+          "scale": 0.9099099722207962,
+          "rotation_degrees": 0.98084838945007,
+          "offset": [
+            497.3547795846394,
+            580.4998481583071
+          ],
+          "anchor_residual_px": 12.441026445137904,
+          "anchor_max_residual_px": 16.794885343728467
+        },
+        "anchors": [
+          {
+            "source": [
+              850,
+              450
+            ],
+            "target": [
+              505,
+              490
+            ]
+          },
+          {
+            "source": [
+              755,
+              505
+            ],
+            "target": [
+              425,
+              520
+            ]
+          },
+          {
+            "source": [
+              950,
+              500
+            ],
+            "target": [
+              590,
+              520
+            ]
+          },
+          {
+            "source": [
+              800,
+              625
+            ],
+            "target": [
+              460,
+              650
+            ]
+          },
+          {
+            "source": [
+              915,
+              625
+            ],
+            "target": [
+              560,
+              650
+            ]
+          }
+        ],
+        "pivot_local": [
+          145.0,
+          138.0
+        ],
+        "source_anchors_px": [
+          [
+            1065.9,
+            564.3
+          ],
+          [
+            946.77,
+            633.27
+          ],
+          [
+            1191.3,
+            627.0
+          ],
+          [
+            1003.2,
+            783.75
+          ],
+          [
+            1147.41,
+            783.75
+          ]
+        ],
+        "target_anchors_px": [
+          [
+            633.27,
+            614.46
+          ],
+          [
+            532.95,
+            652.08
+          ],
+          [
+            739.86,
+            652.08
+          ],
+          [
+            576.84,
+            815.1
+          ],
+          [
+            702.24,
+            815.1
+          ]
+        ],
+        "normalized_bbox": [
+          730,
+          430,
+          975,
+          650
+        ],
+        "background_mode": "alpha",
+        "confidence": 0.95,
+        "notes": "Large teal neck bow; target placement is partly occluded by the collar and bodice.",
+        "warnings": [],
+        "quality": "unverified-proposal",
+        "backend": "gpt-atlas-alignment",
+        "model": "gpt-5.6-luna",
+        "transformed_crop_bbox": [
+          493.04022237460805,
+          580.4998481583071,
+          777.5659864811912,
+          837.3053928291536
+        ],
+        "manual_adjustments": [],
+        "scale": 0.9099099722207962,
+        "rotation_degrees": 0.98084838945007,
+        "offset": [
+          497.3547795846394,
+          580.4998481583071
+        ],
+        "anchor_residual_px": 12.441026445137904,
+        "anchor_max_residual_px": 16.794885343728467
+      },
+      {
+        "id": "629eb6d32093588090c6e566c9da41b5",
+        "name": "hair_clip",
+        "atlas_hash": "82284584fd3ee330a4399eee65b690b07be71106c720b934c7c5be23154b3b37",
+        "atlas_name": "parts_atlas.png",
+        "crop": [
+          131,
+          940,
+          327,
+          1160
+        ],
+        "source_size": [
+          1254,
+          1254
+        ],
+        "destination_size": [
+          1254,
+          1254
+        ],
+        "canvas_size": [
+          1254,
+          1254
+        ],
+        "sent_sizes": {
+          "reference": [
+            1024,
+            1024
+          ],
+          "atlas": [
+            1024,
+            1024
+          ]
+        },
+        "preprocessing_scale": {
+          "reference": [
+            0.8165869218500797,
+            0.8165869218500797
+          ],
+          "atlas": [
+            0.8165869218500797,
+            0.8165869218500797
+          ]
+        },
+        "matrix": [
+          [
+            0.3403205918618993,
+            0.017262638717632808,
+            714.496966707768
+          ],
+          [
+            -0.017262638717632808,
+            0.3403205918618993,
+            166.67288532675707
+          ]
+        ],
+        "initial_matrix": [
+          [
+            0.3403205918618993,
+            0.017262638717632808,
+            714.496966707768
+          ],
+          [
+            -0.017262638717632808,
+            0.3403205918618993,
+            166.67288532675707
+          ]
+        ],
+        "initial_fit": {
+          "scale": 0.3407581311439669,
+          "rotation_degrees": -2.903818865096316,
+          "offset": [
+            714.496966707768,
+            166.67288532675707
+          ],
+          "anchor_residual_px": 4.9721268711375215,
+          "anchor_max_residual_px": 5.816922318050534
+        },
+        "anchors": [
+          {
+            "source": [
+              180,
+              765
+            ],
+            "target": [
+              600,
+              135
+            ]
+          },
+          {
+            "source": [
+              125,
+              805
+            ],
+            "target": [
+              575,
+              155
+            ]
+          },
+          {
+            "source": [
+              235,
+              885
+            ],
+            "target": [
+              615,
+              175
+            ]
+          }
+        ],
+        "pivot_local": [
+          96.5,
+          107.5
+        ],
+        "source_anchors_px": [
+          [
+            225.72,
+            959.3100000000001
+          ],
+          [
+            156.75,
+            1009.47
+          ],
+          [
+            294.69,
+            1109.79
+          ]
+        ],
+        "target_anchors_px": [
+          [
+            752.4,
+            169.29
+          ],
+          [
+            721.05,
+            194.37
+          ],
+          [
+            771.21,
+            219.45
+          ]
+        ],
+        "normalized_bbox": [
+          105,
+          750,
+          260,
+          925
+        ],
+        "background_mode": "alpha",
+        "confidence": 0.9,
+        "notes": "Cross-shaped metallic hairpin; target position is on the image-right side fringe.",
+        "warnings": [],
+        "quality": "unverified-proposal",
+        "backend": "gpt-atlas-alignment",
+        "model": "gpt-5.6-luna",
+        "transformed_crop_bbox": [
+          714.496966707768,
+          163.28940813810104,
+          784.9975832305795,
+          241.5434155363749
+        ],
+        "manual_adjustments": [],
+        "scale": 0.3407581311439669,
+        "rotation_degrees": -2.903818865096316,
+        "offset": [
+          714.496966707768,
+          166.67288532675707
+        ],
+        "anchor_residual_px": 4.9721268711375215,
+        "anchor_max_residual_px": 5.816922318050534
+      },
+      {
+        "id": "32eb0648436c5ac383c386c5e4d79abf",
+        "name": "mouth",
+        "atlas_hash": "82284584fd3ee330a4399eee65b690b07be71106c720b934c7c5be23154b3b37",
+        "atlas_name": "parts_atlas.png",
+        "crop": [
+          470,
+          1053,
+          646,
+          1129
+        ],
+        "source_size": [
+          1254,
+          1254
+        ],
+        "destination_size": [
+          1254,
+          1254
+        ],
+        "canvas_size": [
+          1254,
+          1254
+        ],
+        "sent_sizes": {
+          "reference": [
+            1024,
+            1024
+          ],
+          "atlas": [
+            1024,
+            1024
+          ]
+        },
+        "preprocessing_scale": {
+          "reference": [
+            0.8165869218500797,
+            0.8165869218500797
+          ],
+          "atlas": [
+            0.8165869218500797,
+            0.8165869218500797
+          ]
+        },
+        "matrix": [
+          [
+            0.726684674438442,
+            -0.03447540517486478,
+            575.2596779926073
+          ],
+          [
+            0.03447540517486478,
+            0.726684674438442,
+            432.47387190787606
+          ]
+        ],
+        "initial_matrix": [
+          [
+            0.726684674438442,
+            -0.03447540517486478,
+            575.2596779926073
+          ],
+          [
+            0.03447540517486478,
+            0.726684674438442,
+            432.47387190787606
+          ]
+        ],
+        "initial_fit": {
+          "scale": 0.7275020066128172,
+          "rotation_degrees": 2.7161922048722826,
+          "offset": [
+            575.2596779926073,
+            432.47387190787606
+          ],
+          "anchor_residual_px": 2.3786367663177983,
+          "anchor_max_residual_px": 3.3044323452597366
+        },
+        "anchors": [
+          {
+            "source": [
+              400,
+              865
+            ],
+            "target": [
+              475,
+              365
+            ]
+          },
+          {
+            "source": [
+              445,
+              878
+            ],
+            "target": [
+              510,
+              373
+            ]
+          },
+          {
+            "source": [
+              495,
+              860
+            ],
+            "target": [
+              545,
+              365
+            ]
+          }
+        ],
+        "pivot_local": [
+          87.0,
+          37.5
+        ],
+        "source_anchors_px": [
+          [
+            501.6,
+            1084.71
+          ],
+          [
+            558.03,
+            1101.012
+          ],
+          [
+            620.73,
+            1078.44
+          ]
+        ],
+        "target_anchors_px": [
+          [
+            595.65,
+            457.71
+          ],
+          [
+            639.54,
+            467.742
+          ],
+          [
+            683.43,
+            457.71
+          ]
+        ],
+        "normalized_bbox": [
+          375,
+          840,
+          515,
+          900
+        ],
+        "background_mode": "alpha",
+        "confidence": 0.82,
+        "notes": "Small smiling mouth isolated; target expression has a slightly broader smile and is partly softened by shading.",
+        "warnings": [],
+        "quality": "unverified-proposal",
+        "backend": "gpt-atlas-alignment",
+        "model": "gpt-5.6-luna",
+        "transformed_crop_bbox": [
+          572.6395471993176,
+          432.47387190787606,
+          703.1561806937731,
+          493.76957847597384
+        ],
+        "manual_adjustments": [],
+        "scale": 0.7275020066128172,
+        "rotation_degrees": 2.7161922048722826,
+        "offset": [
+          575.2596779926073,
+          432.47387190787606
+        ],
+        "anchor_residual_px": 2.3786367663177983,
+        "anchor_max_residual_px": 3.3044323452597366
+      }
+    ],
+    "response_model": "gpt-5.6-luna",
+    "response_id": "chatcmpl-EVHX1Z27MON6OVUTNRahxpRwWeXbu",
+    "usage": {
+      "prompt_tokens": 2842,
+      "completion_tokens": 1178,
+      "total_tokens": 4020,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 232,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      }
+    }
+  },
+  "parts": [
+    {
+      "id": "8fd11819cf4e561c839903b32d6c14a1",
+      "name": "maid_body",
+      "kind": "torso_costume",
+      "bounds": [
+        315,
+        455,
+        1087,
+        1134
+      ],
+      "pixels": 371920,
+      "confidence": 0.96,
+      "anchor_residual_px": 32.7540090606708,
+      "warnings": [
+        "anchor-mismatch"
+      ],
+      "notes": "Complete upper costume isolated; lower skirt is cropped and body edges are partially truncated by atlas bounds."
+    },
+    {
+      "id": "ace778d08e0b52a099e897ad50d1d855",
+      "name": "back_hair",
+      "kind": "rear_hair",
+      "bounds": [
+        330,
+        4,
+        892,
+        557
+      ],
+      "pixels": 236915,
+      "confidence": 0.9,
+      "anchor_residual_px": 43.30098540416305,
+      "warnings": [
+        "anchor-mismatch"
+      ],
+      "notes": "Rear bob layer matches the rounded hair mass; maid headband is separate."
+    },
+    {
+      "id": "8cbd87246a895a23bdc80bc857ba8d22",
+      "name": "neck_face",
+      "kind": "face_skin",
+      "bounds": [
+        457,
+        103,
+        830,
+        610
+      ],
+      "pixels": 116327,
+      "confidence": 0.92,
+      "anchor_residual_px": 20.654173213837822,
+      "warnings": [
+        "anchor-mismatch"
+      ],
+      "notes": "Blank face base with ears and neck; facial features are supplied separately."
+    },
+    {
+      "id": "a2640f74c2c5597c84513a068de25692",
+      "name": "front_hair",
+      "kind": "front_hair",
+      "bounds": [
+        389,
+        0,
+        882,
+        586
+      ],
+      "pixels": 143881,
+      "confidence": 0.88,
+      "anchor_residual_px": 24.824208341776327,
+      "warnings": [
+        "anchor-mismatch",
+        "transformed-crop-outside-canvas"
+      ],
+      "notes": "Front fringe and side locks correspond, though the atlas hair silhouette differs slightly from the dressed reference."
+    },
+    {
+      "id": "6695be46fb5a5c2e878f186665ff9a1b",
+      "name": "maid_headband",
+      "kind": "headband_ruffle",
+      "bounds": [
+        371,
+        0,
+        903,
+        342
+      ],
+      "pixels": 62643,
+      "confidence": 0.94,
+      "anchor_residual_px": 26.739181757830192,
+      "warnings": [
+        "anchor-mismatch",
+        "transformed-crop-outside-canvas"
+      ],
+      "notes": "Arched white ruffle headband; much of its inner opening is transparent."
+    },
+    {
+      "id": "4b116e80500f5c39aac62b1e4e78a8a7",
+      "name": "visible_eye",
+      "kind": "eye",
+      "bounds": [
+        648,
+        313,
+        747,
+        372
+      ],
+      "pixels": 4092,
+      "confidence": 0.84,
+      "anchor_residual_px": 11.219133918171826,
+      "warnings": [],
+      "notes": "Single visible eye; target is the character's image-right eye, with perspective and eyelid shape differences."
+    },
+    {
+      "id": "0d93531fd40c5856b50fd99fef72f71a",
+      "name": "neck_bow",
+      "kind": "ribbon_bow",
+      "bounds": [
+        494,
+        582,
+        759,
+        835
+      ],
+      "pixels": 40885,
+      "confidence": 0.95,
+      "anchor_residual_px": 12.441026445137904,
+      "warnings": [],
+      "notes": "Large teal neck bow; target placement is partly occluded by the collar and bodice."
+    },
+    {
+      "id": "629eb6d32093588090c6e566c9da41b5",
+      "name": "hair_clip",
+      "kind": "cross_hairpin",
+      "bounds": [
+        717,
+        164,
+        782,
+        230
+      ],
+      "pixels": 1753,
+      "confidence": 0.9,
+      "anchor_residual_px": 4.9721268711375215,
+      "warnings": [],
+      "notes": "Cross-shaped metallic hairpin; target position is on the image-right side fringe."
+    },
+    {
+      "id": "32eb0648436c5ac383c386c5e4d79abf",
+      "name": "mouth",
+      "kind": "mouth",
+      "bounds": [
+        575,
+        435,
+        700,
+        494
+      ],
+      "pixels": 1655,
+      "confidence": 0.82,
+      "anchor_residual_px": 2.3786367663177983,
+      "warnings": [],
+      "notes": "Small smiling mouth isolated; target expression has a slightly broader smile and is partly softened by shading."
+    }
+  ],
+  "coverage": {
+    "reference_opaque_pixels_without_aligned_coverage": 960626,
+    "overlapping_pixels": 252312,
+    "mean_rgb_error_on_aligned_coverage": 73.99202797888509,
+    "note": "Reference backgrounds count as uncovered. Differences and overlap are diagnostic, not semantic quality scores."
+  },
+  "checks": {
+    "gpt_request": "live_success",
+    "project_roundtrip": true,
+    "original_atlas_preserved": true,
+    "psd_independent_layer_pixels_and_alpha": true,
+    "alignment_quality": "requires_human_review",
+    "cubism_import": "not_run",
+    "offline_replay_composite_identical": true,
+    "offline_replay_stable_ids_identical": true,
+    "actual_sample_adjustment_and_undo": true
+  },
+  "artifacts_sha256": {
+    "atlas_original.png": "82284584fd3ee330a4399eee65b690b07be71106c720b934c7c5be23154b3b37",
+    "comparison.png": "769a40f2414e196f9f569ce8f9b98d2d94a489dfb554463cf11b5156bf531ae7",
+    "coverage.png": "986b798cde01ffbf680f222df20aecaff83c4edbff437f876cb71033e63f01cf",
+    "difference.png": "a939b2e669e57bf98980f053d7006bc24373532f952d80a672446b9dacfa3f81",
+    "isolated_layers.png": "7731d4cd098eceb85f7567f40d659a98485d39fd2d8a3a5f544398be6f504263",
+    "mask_01.png": "154499032be12c51e7550c961514db7df32fc5612e11a97aaeea0c3237a4e6e7",
+    "mask_02.png": "627d9dd98595beefa587afcd1e0c2a8407e19cc990eb119fb3cee3ecd870deed",
+    "mask_03.png": "d7bb06fe2f1a5051a89a917056c6c0416601e0aca912ef535042c03bb27dc379",
+    "mask_04.png": "e4c76aef9bd79656ee45e481dca4d4e5df5b0c51f571d0b8369677877e4d4890",
+    "mask_05.png": "fdceeee55b120ade6c727b10f6031d1db0890abc5c3a5eae641acc5aa1ac6de6",
+    "mask_06.png": "fae12b271443434fbedbd84ad1f6c6a2b1138a18d2bee5af31179aa96a5dbd53",
+    "mask_07.png": "28dec4b40791869e9124c66bd4eac3ef29af206e5340023fa5d77fc30359e353",
+    "mask_08.png": "de5eeb5c4f213aa913830a51d09d83f69b2d8c6779f6e7159326a207a0aaf3df",
+    "mask_09.png": "4f571da9b685760e8b14183a3a5cf4a65a7538246be9c422a85a0fd79131b5fe",
+    "parts.psd": "ef33fc2d0579f8b6d14196c7098d81fa4c06b1f7199786f5b4813319f7cec3e2",
+    "png/assets/82284584fd3ee330a4399eee65b690b07be71106c720b934c7c5be23154b3b37.png": "1846e3f7656a304d473bafb6ef054683b6398aad3216b74ae97b9f639569234d",
+    "png/manifest.json": "1b7d1127c807ee5ec0d4ad2d1f49b37ccfab675fdc59059f088ffc9a19c75cf0",
+    "png/parts/000_maid_body.png": "6267cb40497a210154839b4fa4cec618a842f08e727557142db767b6750d124c",
+    "png/parts/000_maid_body_asset.png": "7a571b26af821b1a0ee964b5f5716f9aa8adef69b2c35a5a6d78161d7f031faa",
+    "png/parts/000_maid_body_asset_mask.png": "482be99429ee19455e791d295103e6b143ecc2dd91a4732419837bf2ccad41e7",
+    "png/parts/001_back_hair.png": "97ba40d4aa3ffa53f8700aad72b5bdb7de308e83ef87ba561924e5f5e52e7da6",
+    "png/parts/001_back_hair_asset.png": "7804290af844f7c4b249822370f457966485541255af7e804ad50e6b489d1d29",
+    "png/parts/001_back_hair_asset_mask.png": "e224d2a0914088b09bf278775fdad50b23ce184ac5c21cb72600a69ccb3b5247",
+    "png/parts/002_neck_face.png": "1348bbf6dcdc0e9cc15fb5168ff83b1e540a7d6f4b65dba5b46de5b6c5f5d648",
+    "png/parts/002_neck_face_asset.png": "ecad8a9a4aa810286d88a9df9f7858724c5155c028b420abb169a8879a13fd0b",
+    "png/parts/002_neck_face_asset_mask.png": "b3745b1621fbef9ea0cfbff950968caf965669b15ddc9d834417ae6054c02cfb",
+    "png/parts/003_front_hair.png": "e7f09f558454b2ad474fca0432448b368972fb2f1159ed5f115ed216caa2aab4",
+    "png/parts/003_front_hair_asset.png": "be34590dde60cc9f795b9e2121de3f30e11d2bd721a0131b47667d215150fa2e",
+    "png/parts/003_front_hair_asset_mask.png": "f2d55a21e1b382c7e69e9ee0492d8d34ea3573d97c1798dcc9a88c617a984b93",
+    "png/parts/004_maid_headband.png": "a3d6d66e0fa8ebe35537c0f977876693aef151b48191aa3367cb2b7b65f11cec",
+    "png/parts/004_maid_headband_asset.png": "0b7a4e1561061deaa4f1a3f230c1404590892d254ce526c103e1e4f39d6b53b5",
+    "png/parts/004_maid_headband_asset_mask.png": "663c72c5545c2f8d3c693dbe06f45fdd50e4e53f58bbdb902317a72f4848e798",
+    "png/parts/005_visible_eye.png": "ec7f73eae0ad7454a669b6693e1c1c9f2da5ff274ea20c1826c93f82c8f76384",
+    "png/parts/005_visible_eye_asset.png": "05608b9204f30ba70a55ade678ccf6f61cee8d4fd908c762aa3365de834ae344",
+    "png/parts/005_visible_eye_asset_mask.png": "80c2e1a880dd477e9e58971f91edd5a49ce43f18a1afd15989085e8bfa5d3955",
+    "png/parts/006_neck_bow.png": "598e99426b20c6047f50aa53e969ac28bf038d40ea8f985331fd525b181be910",
+    "png/parts/006_neck_bow_asset.png": "51eb98b5462342d5712f517b22b2c0c59c34f089a8590c78bac6e6f66c45d434",
+    "png/parts/006_neck_bow_asset_mask.png": "3e9e1cceedcd605c8ce5fce04224e32eeaf6ae17fe881bd6d9b1553203593190",
+    "png/parts/007_hair_clip.png": "59d3f2132713e995c402ee2b73fa3e0cb7c65cb43a71414f35566f7136bdebe6",
+    "png/parts/007_hair_clip_asset.png": "25026b48daffb7292efa676932c9d31e44de72b1020a6deb2ae067d9ce90b776",
+    "png/parts/007_hair_clip_asset_mask.png": "018d09d9171861211ab5a2b678710e9b197ff772e416146a17ee3f60af1bc33a",
+    "png/parts/008_mouth.png": "aae6785c018ab201c4be28382ecde638194ef3e3b6aac81fec27ba2cc25851b3",
+    "png/parts/008_mouth_asset.png": "f5d86fe47237990e7b3769c9e1b082504c5d08ef2ec12611aff3210335eeae9b",
+    "png/parts/008_mouth_asset_mask.png": "8cb22aadb9cb44c5448e14698635a27124d5b20226b5af8d427f2eb2d6e121fc",
+    "png/preview.png": "b7d27ad36ad18ee632857b7d20bf4ebc8c3da5123b4e8ec0b36dfb9f827e5f0b",
+    "project.l2split": "0808a25237c026b28392d3f0d7d956270190413f4cbb5e28536f296882c92568",
+    "reconstructed.png": "b7d27ad36ad18ee632857b7d20bf4ebc8c3da5123b4e8ec0b36dfb9f827e5f0b",
+    "reference_original.png": "03c118c9069f501e51e841cb9152510e5f60e1cc6f215a51591ae21297928442",
+    "response.json": "a797c6676b2f0773e60d7e3ad0365d83b84f412a1ae8ffbbdb0a534882fce114"
+  }
+}

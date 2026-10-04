@@ -11,16 +11,17 @@ from PySide6.QtWidgets import (
     QGraphicsPixmapItem, QGraphicsScene, QGraphicsView, QHBoxLayout, QInputDialog,
     QLabel, QLineEdit, QListWidget, QMainWindow, QMessageBox, QPushButton,
     QSlider, QSpinBox, QSplitter, QVBoxLayout, QWidget,
-    QProgressDialog,
+    QProgressDialog, QDialog, QDialogButtonBox, QDoubleSpinBox, QScrollArea,
 )
 
 from .application import Editor
+from .alignment import GPTAlignmentBackend
 from .core import composite, layer_pixels, validate
 from .exporters import PsdExporter
 from .gpt_parts import GPTPartsBackend
 from .inference import AlphaBackend, ColorPartsBackend
 from .inpainting import LaMaBackend, TeleaBackend
-from .infrastructure import export_png, import_image, load_project, save_project
+from .infrastructure import export_png, import_image, load_project, save_project, require_matching_profiles
 
 
 def pixmap(pixels: np.ndarray) -> QPixmap:
@@ -193,6 +194,8 @@ class MainWindow(QMainWindow):
             ("不透明領域のマスク候補", self.propose),
             ("自動パーツ分割（色領域）", self.auto_parts),
             ("GPTでパーツ候補（外部送信）", self.gpt_parts),
+            ("GPTでシートを位置合わせ（外部送信）", self.align_parts),
+            ("選択パーツの位置合わせを調整", self.adjust_alignment),
             ("隠れ領域を補完", self.repair),
         ]:
             button = QPushButton(title)
@@ -201,9 +204,15 @@ class MainWindow(QMainWindow):
         self.solo = QCheckBox("再合成で選択パーツのみ表示")
         self.solo.toggled.connect(self.refresh_canvas)
         sidebar.addWidget(self.solo)
+        self.alignment_info = QLabel()
+        self.alignment_info.setWordWrap(True)
+        sidebar.addWidget(self.alignment_info)
         side = QWidget()
         side.setLayout(sidebar)
-        side.setMaximumWidth(320)
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setWidget(side)
+        scroll.setMaximumWidth(340)
 
         self.mode = QComboBox()
         self.mode.addItems(["原画", "マスク編集・オーバーレイ", "選択パーツ", "再合成", "差分"])
@@ -233,7 +242,7 @@ class MainWindow(QMainWindow):
         center = QWidget()
         center.setLayout(body)
         splitter = QSplitter()
-        splitter.addWidget(side)
+        splitter.addWidget(scroll)
         splitter.addWidget(center)
         self.setCentralWidget(splitter)
         self.statusBar().showMessage("画像を読み込んで、パーツを追加してください。")
@@ -421,7 +430,8 @@ class MainWindow(QMainWindow):
             backend = LaMaBackend(path)
         else:
             backend = TeleaBackend()
-        source = editor.project.source
+        part = editor.project.parts[index]
+        source = part.artwork if part.artwork is not None else editor.project.source
 
         def show(proposal):
             temporary = editor.project.snapshot()
@@ -461,6 +471,160 @@ class MainWindow(QMainWindow):
                 self.refresh()
 
         self.background("GPTの分類・位置候補を取得中…", lambda: backend.propose_parts(source), show)
+
+    def confirm_alignment(self, title, text, reference, reconstructed):
+        """Inspect the proposal at useful size before changing the editing state."""
+        dialog = QDialog(self)
+        dialog.setWindowTitle(title)
+        layout = QVBoxLayout(dialog)
+        explanation = QLabel(text)
+        explanation.setTextFormat(Qt.PlainText)
+        explanation.setWordWrap(True)
+        details = QScrollArea()
+        details.setWidgetResizable(True)
+        details.setWidget(explanation)
+        details.setMaximumHeight(230)
+        details.setMinimumHeight(110)
+        layout.addWidget(details)
+        pictures = QHBoxLayout()
+        difference = np.abs(reference.astype(np.int16) - reconstructed.astype(np.int16)).astype(np.uint8)
+        difference[..., 3] = 255
+        for label, pixels in (("完成絵", reference), ("再合成候補", reconstructed), ("差分", difference)):
+            column = QVBoxLayout()
+            column.addWidget(QLabel(label))
+            view = QLabel()
+            view.setPixmap(pixmap(pixels).scaled(300, 460, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+            view.setStyleSheet("background: #666;")
+            column.addWidget(view)
+            pictures.addLayout(column)
+        layout.addLayout(pictures)
+        buttons = QDialogButtonBox(QDialogButtonBox.Yes | QDialogButtonBox.No)
+        buttons.button(QDialogButtonBox.Yes).setText("採用する")
+        buttons.button(QDialogButtonBox.No).setText("破棄する")
+        buttons.button(QDialogButtonBox.No).setDefault(True)
+        buttons.accepted.connect(dialog.accept)
+        buttons.rejected.connect(dialog.reject)
+        layout.addWidget(buttons)
+        return dialog.exec() == QDialog.Accepted
+
+    def align_parts(self):
+        editor = self.require()
+        backend = GPTAlignmentBackend()
+        if not backend.api_key:
+            raise ValueError("環境設定で GPT_API_KEY を設定してください。")
+        path, _ = QFileDialog.getOpenFileName(self, "分割パーツのシートを読み込む", "", "画像 (*.png *.jpg *.jpeg *.webp)")
+        if not path:
+            return
+        atlas = import_image(path)
+        require_matching_profiles(editor.project, atlas)
+        mode, ok = QInputDialog.getItem(
+            self, "シートの背景", "パーツ周囲の背景を選んでください。白い背景では輪郭の手直しが必要になることがあります。",
+            ["透明背景（PNGの透明度を使う）", "白い背景（外周につながる白い余白を除去）"], 0, False)
+        if not ok:
+            return
+        if mode.startswith("透明") and np.all(atlas.source[..., 3] == 255):
+            raise ValueError("シートに透明な画素がありません。白い背景を選ぶか、透過PNGを用意してください。")
+        model, ok = QInputDialog.getText(self, "GPTモデル", "このAPIキーで利用できる画像対応モデル", text=backend.model)
+        if not ok:
+            return
+        if not model.strip():
+            raise ValueError("モデル名を入力してください。")
+        backend.model = model.strip()
+        answer = QMessageBox.question(
+            self, "OpenAIへの画像送信",
+            f"完成絵とパーツシートをそれぞれ最大1024pxに縮小して api.openai.com に送信します。\n"
+            f"モデル: {backend.model}\nパーツの対応・基準点・前後関係を推定します。APIの利用料金が発生します。送信しますか？",
+            QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if answer != QMessageBox.Yes:
+            return
+        source = editor.project.source
+        background_mode = "alpha" if mode.startswith("透明") else "white"
+
+        def show(proposal):
+            temporary = editor.project.snapshot()
+            preview_editor = Editor(temporary)
+            preview_editor.accept_parts(proposal)
+            names = "、".join(p.name for p in proposal.parts)
+            warnings = []
+            for part in proposal.parts:
+                metadata = part.alignment or {}
+                confidence = metadata.get("confidence")
+                residual = metadata.get("anchor_residual_px")
+                detail = f"{part.name}"
+                if confidence is not None:
+                    detail += f": AIの自己評価 {confidence:.0%}"
+                if residual is not None:
+                    detail += f" / 基準点のずれ {residual:.1f}px"
+                labels = {"low-confidence": "AIの自己評価が低い", "anchor-mismatch": "基準点のずれが大きい",
+                          "transformed-crop-outside-canvas": "切り出し範囲の一部がキャンバス外",
+                          "heuristic-white-background-removal": "白い余白の除去結果を要確認"}
+                notices = [labels[warning] for warning in metadata.get("warnings", []) if warning in labels]
+                if notices:
+                    detail += "\n  " + "、".join(notices)
+                if metadata.get("notes"):
+                    detail += "\n  " + metadata["notes"]
+                warnings.append(detail)
+            text = (f"{names}\n\n" + "\n".join(warnings)
+                    + "\n\nAIの推定候補です。輪郭・左右・位置・順序を確認してください。"
+                    "既存のパーツを保持して追加します。採用後も位置・大きさ・角度、マスクを修正でき、Undoできます。")
+            if self.confirm_alignment("シートの位置合わせ候補", text, source, composite(preview_editor.project)):
+                first = len(editor.project.parts)
+                editor.accept_parts(proposal)
+                self.mode.setCurrentIndex(3)
+                self.refresh(first)
+
+        self.background("GPTでパーツの対応と基準点を推定中…",
+                        lambda: backend.propose_alignment(source, atlas.source, atlas_name=atlas.source_name,
+                                                         atlas_hash=atlas.source_hash, background_mode=background_mode), show)
+
+    def adjust_alignment(self):
+        editor = self.require_part()
+        index = self.index()
+        if editor.project.parts[index].alignment is None:
+            raise ValueError("シートから位置合わせして追加したパーツを選択してください。")
+        width, height = editor.project.size
+        dialog = QDialog(self)
+        dialog.setWindowTitle("選択パーツの位置合わせを調整")
+        layout = QVBoxLayout(dialog)
+        layout.addWidget(QLabel("現在のパーツ中心を基準に調整します。次の画面で再合成を確認して採用できます。"))
+        form = QFormLayout()
+        controls = []
+        for label, minimum, maximum, value in (
+            ("大きさ (%)", 10, 1000, 100), ("角度 (度)", -180, 180, 0),
+            ("横へ移動 (px)", -2 * width, 2 * width, 0), ("縦へ移動 (px)", -2 * height, 2 * height, 0),
+        ):
+            control = QDoubleSpinBox()
+            control.setDecimals(2)
+            control.setRange(minimum, maximum)
+            control.setValue(value)
+            form.addRow(label, control)
+            controls.append(control)
+        layout.addLayout(form)
+        buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        buttons.accepted.connect(dialog.accept)
+        buttons.rejected.connect(dialog.reject)
+        layout.addWidget(buttons)
+        if dialog.exec() != QDialog.Accepted:
+            return
+        scale, angle, x, y = [control.value() for control in controls]
+        parameters = {"scale": scale / 100, "angle": angle, "offset": (x, y)}
+        snapshot = editor.project.snapshot()
+
+        def prepare():
+            preview_editor = Editor(snapshot)
+            preview_editor.adjust_alignment(index, **parameters)
+            return preview_editor.project
+
+        def show(candidate):
+            if self.confirm_alignment("位置合わせの修正候補", "位置・大きさ・角度の修正を採用しますか？Undoで戻せます。",
+                                      candidate.source, composite(candidate)):
+                # The worker already validated and transformed an isolated snapshot.
+                editor.checkpoint()
+                editor.project = candidate
+                self.mode.setCurrentIndex(3)
+                self.refresh(index)
+
+        self.background("位置合わせの修正候補を作成中…", prepare, show)
 
     def add_part(self):
         self.require().add_part()
@@ -523,9 +687,18 @@ class MainWindow(QMainWindow):
             self.name.setText(part.name)
             self.kind.setText(part.kind)
             self.visible.setChecked(part.visible)
+            if part.alignment:
+                metadata = part.alignment
+                self.alignment_info.setText(
+                    f"シートから位置合わせしたパーツ\n"
+                    f"倍率: {metadata.get('scale', 1):.3f} / 角度: {metadata.get('rotation_degrees', 0):.1f}度\n"
+                    "輪郭はマスク編集、位置は位置合わせ調整で修正できます。")
+            else:
+                self.alignment_info.clear()
         else:
             self.name.clear()
             self.kind.clear()
+            self.alignment_info.clear()
         self.refresh_canvas()
 
     def refresh_canvas(self, *_):

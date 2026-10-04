@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-04",
+  "generator": "OpenAI image generation tool",
+  "reference": "original_character.png",
+  "output": "parts_atlas.png",
+  "transparent_background_requested": true,
+  "postprocessing": "none; original generated file retained",
+  "purpose": "Live GPT matching and editable atlas alignment demonstration",
+  "quality": "Illustrative generated assets; shapes differ from the reference and alpha-edge speckles require manual cleanup",
+  "prompt": "Create a production parts atlas for the ORIGINAL adult anime maid character in this reference (pink asymmetrical bob covering her viewer-left eye, visible red viewer-right eye, silver X clip, white frilled headband, black-and-white maid dress, mint ribbon). Match exactly the reference's art style, colors and shapes as closely as possible. Do not draw any assembled character preview. Do not draw text, borders, grid lines, labels, checkerboard or shadows. All parts are separate non-touching objects with generous transparent margins in a clean spacious 3 by 3 atlas. Row1: full back bob hair as a standalone solid complete pink silhouette behind the head (no face), blank skin face with ears and complete forehead/chin but NO eyes, eyebrows, mouth or hair, entire front bangs as a separate pink lock mass with NO clip. Row2: white frilled maid headband alone, one detailed open red eye (viewer-right, sclera iris lashes) alone, mint neck ribbon alone. Row3: silver X hair clip alone, small neutral smiling mouth alone, full black-and-white upper torso dress with collar, sleeves, cuffs and neck skin, WITHOUT head/hair/eyes/ribbon. Preserve white fabric opaque even with transparent surroundings. Render hidden edges of the face and back hair completely so overlap with bangs is possible. Keep all parts at clear usable resolution. These are editable Live2D source materials, all nine isolated part objects, one PNG with actual transparent alpha background.",
+  "reference_sha256": "03c118c9069f501e51e841cb9152510e5f60e1cc6f215a51591ae21297928442",
+  "output_sha256": "82284584fd3ee330a4399eee65b690b07be71106c720b934c7c5be23154b3b37"
+}

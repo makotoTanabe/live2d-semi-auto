@@ -1,6 +1,6 @@
 """Explicit local proposals; no model downloads or network requests."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Protocol
 
 import cv2
@@ -25,6 +25,7 @@ class AlphaBackend:
 class PartsProposal:
     parts: list[Part]
     metadata: dict
+    assets: dict[str, np.ndarray] = field(default_factory=dict)
 
 
 class ColorPartsBackend:

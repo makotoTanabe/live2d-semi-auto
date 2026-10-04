@@ -16,7 +16,7 @@ from PIL import Image, ImageOps
 from .core import Part, Project, composite, layer_pixels, mask_bounds, validate
 
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 
 
 def import_image(path: str | Path) -> Project:
@@ -30,6 +30,15 @@ def import_image(path: str | Path) -> Project:
     pixels.flags.writeable = False
     return Project(pixels, path.name, hashlib.sha256(raw).hexdigest(),
                    icc_profile=profile, original_path=str(path.resolve()))
+
+
+def require_matching_profiles(reference: Project, atlas: Project) -> None:
+    """Aligned canvases use reference colors while retaining original atlas RGB."""
+    if reference.icc_profile != atlas.icc_profile:
+        raise ValueError(
+            "完成絵とパーツシートのカラープロファイルが一致しません。"
+            "元ファイルを残し、両方を同じsRGBプロファイルで書き出してから読み込んでください。"
+            "画像はまだ送信されていません。")
 
 
 def _png(pixels: np.ndarray, profile: bytes | None = None) -> bytes:
@@ -60,7 +69,7 @@ def save_project(project: Project, path: str | Path) -> None:
         "schema_version": SCHEMA_VERSION, "application_version": "0.1.0",
         "canvas": list(project.size), "source_name": project.source_name,
         "source_hash": project.source_hash, "source": "source.png", "parts": [],
-        "history": project.history,
+        "history": project.history, "assets": {},
     }
     temporary = None
     try:
@@ -68,6 +77,10 @@ def save_project(project: Project, path: str | Path) -> None:
             temporary = Path(file.name)
         with zipfile.ZipFile(temporary, "w", compression=zipfile.ZIP_DEFLATED) as archive:
             archive.writestr("source.png", _png(project.source, project.icc_profile))
+            for digest, pixels in project.assets.items():
+                asset_path = f"assets/{digest}.png"
+                archive.writestr(asset_path, _png(pixels, project.icc_profile))
+                manifest["assets"][digest] = asset_path
             for order, part in enumerate(project.parts):
                 asset = f"masks/{order}.png"
                 archive.writestr(asset, _png(part.mask))
@@ -77,10 +90,16 @@ def save_project(project: Project, path: str | Path) -> None:
                 }
                 for key, pixels in (("hidden_mask", part.hidden_mask),
                                     ("generated", part.generated),
-                                    ("generated_mask", part.generated_mask)):
+                                    ("generated_mask", part.generated_mask),
+                                    ("artwork", part.artwork), ("asset", part.asset),
+                                    ("asset_mask", part.asset_mask),
+                                    ("alignment_edit_mask", part.alignment_edit_mask)):
                     if pixels is not None:
                         item[key] = f"{key}/{order}.png"
-                        archive.writestr(item[key], _png(pixels, project.icc_profile if key == "generated" else None))
+                        archive.writestr(item[key], _png(
+                            pixels, project.icc_profile if key in {"generated", "artwork", "asset"} else None))
+                if part.alignment is not None:
+                    item["alignment"] = part.alignment
                 manifest["parts"].append(item)
             archive.writestr("manifest.json", json.dumps(manifest, ensure_ascii=False))
         with temporary.open("rb") as file:
@@ -95,13 +114,23 @@ def load_project(path: str | Path) -> Project:
     try:
         with zipfile.ZipFile(path) as archive:
             data = json.loads(archive.read("manifest.json"))
-            if type(data["schema_version"]) is not int or data["schema_version"] not in {1, SCHEMA_VERSION}:
+            if type(data["schema_version"]) is not int or data["schema_version"] not in {1, 2, SCHEMA_VERSION}:
                 raise ValueError("未対応のプロジェクト形式です。")
             with Image.open(io.BytesIO(archive.read(data["source"]))) as image:
                 source = np.array(image.convert("RGBA"))
                 profile = image.info.get("icc_profile")
             if data["canvas"] != [source.shape[1], source.shape[0]]:
                 raise ValueError("保存されたキャンバスと原画の寸法が一致しません。")
+            assets = {}
+            if not isinstance(data.get("assets", {}), dict):
+                raise ValueError("元パーツシートの一覧が不正です。")
+            for digest, asset_path in data.get("assets", {}).items():
+                with Image.open(io.BytesIO(archive.read(asset_path))) as image:
+                    if image.mode != "RGBA":
+                        raise ValueError("元パーツシートは8bit RGBAである必要があります。")
+                    pixels = np.array(image)
+                    pixels.flags.writeable = False
+                    assets[digest] = pixels
             parts = []
             for order, item in enumerate(data["parts"]):
                 if type(item["z_order"]) is not int or item["z_order"] != order:
@@ -115,15 +144,17 @@ def load_project(path: str | Path) -> Project:
                         raise ValueError("マスクは8bitグレースケールである必要があります。")
                     mask = np.array(image)
                 part = Part(item["name"], mask, item["kind"], item["id"], item["visible"])
-                for key in ("hidden_mask", "generated", "generated_mask"):
+                for key in ("hidden_mask", "generated", "generated_mask", "artwork", "asset", "asset_mask",
+                            "alignment_edit_mask"):
                     if key in item:
                         with Image.open(io.BytesIO(archive.read(item[key]))) as image:
-                            if image.mode != ("RGBA" if key == "generated" else "L"):
-                                raise ValueError("生成データの画像形式が不正です。")
+                            if image.mode != ("RGBA" if key in {"generated", "artwork", "asset"} else "L"):
+                                raise ValueError("パーツデータの画像形式が不正です。")
                             pixels = np.array(image)
-                            if key in {"generated", "generated_mask"}:
+                            if key in {"generated", "generated_mask", "artwork", "asset", "asset_mask", "alignment_edit_mask"}:
                                 pixels.flags.writeable = False
                             setattr(part, key, pixels)
+                part.alignment = item.get("alignment")
                 parts.append(part)
             if not isinstance(data["source_name"], str) or not isinstance(data["source_hash"], str):
                 raise ValueError("原画情報が不正です。")
@@ -132,7 +163,7 @@ def load_project(path: str | Path) -> Project:
             if not isinstance(history, list) or not all(isinstance(item, dict) for item in history):
                 raise ValueError("生成履歴が不正です。")
             project = Project(source, data["source_name"], data["source_hash"], parts, profile,
-                              history=history)
+                              history=history, assets=assets)
             _check(project)
             return project
     except (KeyError, TypeError, json.JSONDecodeError, zipfile.BadZipFile) as exc:
@@ -150,7 +181,13 @@ def export_png(project: Project, directory: str | Path) -> None:
         (staging / "parts").mkdir()
         manifest = {"schema_version": SCHEMA_VERSION, "canvas": list(project.size),
                     "source_name": project.source_name, "source_hash": project.source_hash,
-                    "history": project.history, "parts": []}
+                    "history": project.history, "parts": [], "assets": {}}
+        if project.assets:
+            (staging / "assets").mkdir()
+            for digest, pixels in project.assets.items():
+                relative = f"assets/{digest}.png"
+                (staging / relative).write_bytes(_png(pixels, project.icc_profile))
+                manifest["assets"][digest] = relative
         for order, part in enumerate(project.parts):
             safe = re.sub(r"[^\w-]+", "_", part.name, flags=re.UNICODE).strip("_")[:64] or "part"
             relative = f"parts/{order:03d}_{safe}.png"
@@ -163,6 +200,17 @@ def export_png(project: Project, directory: str | Path) -> None:
                 provenance = f"parts/{order:03d}_{safe}_generated_mask.png"
                 (staging / provenance).write_bytes(_png(part.generated_mask))
                 item["generated_mask"] = provenance
+            if part.alignment is not None:
+                item["alignment"] = part.alignment
+                for key in ("asset", "asset_mask"):
+                    relative = f"parts/{order:03d}_{safe}_{key}.png"
+                    (staging / relative).write_bytes(_png(
+                        getattr(part, key), project.icc_profile if key == "asset" else None))
+                    item[key] = relative
+                if part.alignment_edit_mask is not None:
+                    relative = f"parts/{order:03d}_{safe}_alignment_edit_mask.png"
+                    (staging / relative).write_bytes(_png(part.alignment_edit_mask))
+                    item["alignment_edit_mask"] = relative
             manifest["parts"].append(item)
         (staging / "preview.png").write_bytes(_png(composite(project), project.icc_profile))
         (staging / "manifest.json").write_text(

@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-04",
+  "model": "gpt-5.6-luna",
+  "inputs": [
+    "../../original_character.png",
+    "../../parts_atlas.png"
+  ],
+  "attempts": [
+    {
+      "diagnosis": "Model proposal failed strict name/kind/coordinates/confidence validation; original response was not captured.",
+      "accepted": false,
+      "results_created": false
+    },
+    {
+      "response": "length_response.json",
+      "finish_reason": "length",
+      "completion_tokens": 4096,
+      "reasoning_tokens": 4096,
+      "diagnosis": "All output budget spent on reasoning; no final content.",
+      "accepted": false,
+      "results_created": false
+    }
+  ],
+  "successful_correction": {
+    "max_completion_tokens": 8192,
+    "reasoning_effort": "low",
+    "response": "../alignment/response.json"
+  },
+  "credential_values_saved": false
+}

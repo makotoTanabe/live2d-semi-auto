@@ -1,0 +1,35 @@
+{
+  "id": "chatcmpl-EVHX1Z27MON6OVUTNRahxpRwWeXbu",
+  "object": "chat.completion",
+  "created": 1791124267,
+  "model": "gpt-5.6-luna",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\"parts\":[{\"name\":\"maid_body\",\"kind\":\"torso_costume\",\"atlas_bbox\":[595,650,1000,1000],\"anchors\":[{\"source\":[690,750],\"target\":[420,520]},{\"source\":[850,760],\"target\":[600,520]},{\"source\":[805,920],\"target\":[595,790]},{\"source\":[700,920],\"target\":[410,790]}],\"confidence\":0.96,\"notes\":\"Complete upper costume isolated; lower skirt is cropped and body edges are partially truncated by atlas bounds.\"},{\"name\":\"back_hair\",\"kind\":\"rear_hair\",\"atlas_bbox\":[10,20,380,385],\"anchors\":[{\"source\":[55,270],\"target\":[275,290]},{\"source\":[190,30],\"target\":[490,55]},{\"source\":[350,275],\"target\":[700,295]},{\"source\":[190,370],\"target\":[490,420]}],\"confidence\":0.9,\"notes\":\"Rear bob layer matches the rounded hair mass; maid headband is separate.\"},{\"name\":\"neck_face\",\"kind\":\"face_skin\",\"atlas_bbox\":[405,65,665,420],\"anchors\":[{\"source\":[535,75],\"target\":[510,80]},{\"source\":[425,230],\"target\":[410,270]},{\"source\":[645,230],\"target\":[625,270]},{\"source\":[535,340],\"target\":[510,410]}],\"confidence\":0.92,\"notes\":\"Blank face base with ears and neck; facial features are supplied separately.\"},{\"name\":\"front_hair\",\"kind\":\"front_hair\",\"atlas_bbox\":[660,20,1000,410],\"anchors\":[{\"source\":[700,90],\"target\":[345,125]},{\"source\":[835,35],\"target\":[505,55]},{\"source\":[965,180],\"target\":[665,165]},{\"source\":[710,330],\"target\":[385,360]},{\"source\":[935,350],\"target\":[670,345]}],\"confidence\":0.88,\"notes\":\"Front fringe and side locks correspond, though the atlas hair silhouette differs slightly from the dressed reference.\"},{\"name\":\"maid_headband\",\"kind\":\"headband_ruffle\",\"atlas_bbox\":[15,415,375,660],\"anchors\":[{\"source\":[55,535],\"target\":[330,105]},{\"source\":[175,430],\"target\":[505,28]},{\"source\":[345,525],\"target\":[680,110]}],\"confidence\":0.94,\"notes\":\"Arched white ruffle headband; much of its inner opening is transparent.\"},{\"name\":\"visible_eye\",\"kind\":\"eye\",\"atlas_bbox\":[420,485,615,615],\"anchors\":[{\"source\":[460,535],\"target\":[535,262]},{\"source\":[550,515],\"target\":[580,255]},{\"source\":[570,575],\"target\":[565,292]},{\"source\":[475,590],\"target\":[540,295]}],\"confidence\":0.84,\"notes\":\"Single visible eye; target is the character's image-right eye, with perspective and eyelid shape differences.\"},{\"name\":\"neck_bow\",\"kind\":\"ribbon_bow\",\"atlas_bbox\":[730,430,975,650],\"anchors\":[{\"source\":[850,450],\"target\":[505,490]},{\"source\":[755,505],\"target\":[425,520]},{\"source\":[950,500],\"target\":[590,520]},{\"source\":[800,625],\"target\":[460,650]},{\"source\":[915,625],\"target\":[560,650]}],\"confidence\":0.95,\"notes\":\"Large teal neck bow; target placement is partly occluded by the collar and bodice.\"},{\"name\":\"hair_clip\",\"kind\":\"cross_hairpin\",\"atlas_bbox\":[105,750,260,925],\"anchors\":[{\"source\":[180,765],\"target\":[600,135]},{\"source\":[125,805],\"target\":[575,155]},{\"source\":[235,885],\"target\":[615,175]}],\"confidence\":0.9,\"notes\":\"Cross-shaped metallic hairpin; target position is on the image-right side fringe.\"},{\"name\":\"mouth\",\"kind\":\"mouth\",\"atlas_bbox\":[375,840,515,900],\"anchors\":[{\"source\":[400,865],\"target\":[475,365]},{\"source\":[445,878],\"target\":[510,373]},{\"source\":[495,860],\"target\":[545,365]}],\"confidence\":0.82,\"notes\":\"Small smiling mouth isolated; target expression has a slightly broader smile and is partly softened by shading.\"}]}",
+        "refusal": null,
+        "annotations": []
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 2842,
+    "completion_tokens": 1178,
+    "total_tokens": 4020,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 232,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  },
+  "service_tier": "default",
+  "system_fingerprint": null
+}

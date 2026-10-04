@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtTest import QTest
-from PySide6.QtWidgets import QApplication, QFileDialog, QMessageBox
+from PySide6.QtWidgets import QApplication, QFileDialog, QMessageBox, QInputDialog, QDialog, QDoubleSpinBox
 
 from live2d_semi_auto.infrastructure import load_project
 from live2d_semi_auto.ui import MainWindow
@@ -123,3 +123,103 @@ def test_gpt_image_upload_requires_explicit_confirmation(window, monkeypatch):
     monkeypatch.setattr(QMessageBox, "question", lambda *a: QMessageBox.No)
     window.gpt_parts()
     assert window.worker is None
+
+
+def atlas_upload_setup(window, tmp_path, monkeypatch):
+    import json
+    from PIL import Image
+    from live2d_semi_auto.alignment import GPTAlignmentBackend
+    atlas_path = tmp_path / "atlas.png"
+    Image.fromarray(window.editor.project.source).save(atlas_path)
+    calls = []
+    response = {"choices": [{"message": {"content": json.dumps({"parts": [{
+        "name": "face", "kind": "face", "atlas_bbox": [100, 100, 900, 900],
+        "anchors": [{"source": [200, 200], "target": [200, 200]},
+                    {"source": [800, 200], "target": [800, 200]}],
+        "confidence": 0.9, "notes": "test proposal",
+    }]})}}]}
+
+    class Backend(GPTAlignmentBackend):
+        def __init__(self):
+            super().__init__(api_key="test-token", transport=lambda _: response)
+        def propose_alignment(self, *args, **kwargs):
+            calls.append(True)
+            return super().propose_alignment(*args, **kwargs)
+
+    monkeypatch.setattr("live2d_semi_auto.ui.GPTAlignmentBackend", Backend)
+    monkeypatch.setattr(QFileDialog, "getOpenFileName", lambda *a: (str(atlas_path), ""))
+    monkeypatch.setattr(QInputDialog, "getItem", lambda *a: ("透明背景", True))
+    monkeypatch.setattr(QInputDialog, "getText", lambda *a, **kw: ("test-model", True))
+    return calls
+
+
+def test_atlas_upload_decline_never_calls_model(window, tmp_path, monkeypatch):
+    calls = atlas_upload_setup(window, tmp_path, monkeypatch)
+    monkeypatch.setattr(QMessageBox, "question", lambda *a: QMessageBox.No)
+    window.align_parts()
+    assert calls == [] and window.worker is None
+    assert window.editor.project.parts == []
+
+
+def test_atlas_proposal_rejection_keeps_manual_work(window, tmp_path, monkeypatch):
+    calls = atlas_upload_setup(window, tmp_path, monkeypatch)
+    window.add_part()
+    before_id = window.editor.project.parts[0].id
+    history_length = len(window.editor.undo_stack)
+    monkeypatch.setattr(QMessageBox, "question", lambda *a: QMessageBox.Yes)
+    monkeypatch.setattr(window, "confirm_alignment", lambda *a: False)
+    window.align_parts()
+    wait_for_worker(window)
+    assert calls == [True]
+    assert [p.id for p in window.editor.project.parts] == [before_id]
+    assert window.editor.project.assets == {}
+    assert len(window.editor.undo_stack) == history_length
+
+
+def test_atlas_acceptance_matches_preview_with_existing_parts(window, tmp_path, monkeypatch):
+    from live2d_semi_auto.core import composite
+    calls = atlas_upload_setup(window, tmp_path, monkeypatch)
+    window.add_part()
+    window.editor.project.parts[0].mask[:, :5] = 255
+    existing_id = window.editor.project.parts[0].id
+    inspected = []
+    monkeypatch.setattr(QMessageBox, "question", lambda *a: QMessageBox.Yes)
+    monkeypatch.setattr(window, "confirm_alignment", lambda *a: inspected.append(a[-1].copy()) or True)
+    window.align_parts()
+    wait_for_worker(window)
+    assert calls == [True]
+    assert len(window.editor.project.parts) == 2
+    assert window.editor.project.parts[0].id == existing_id
+    assert np.array_equal(composite(window.editor.project), inspected[0])
+    assert window.editor.project.parts[1].artwork is not None
+    window.history(False)
+    assert [p.id for p in window.editor.project.parts] == [existing_id]
+    assert window.editor.project.assets == {}
+    window.history(True)
+    assert len(window.editor.project.parts) == 2
+
+
+def test_gui_alignment_adjustment_is_reviewable_and_undoable(window, tmp_path, monkeypatch):
+    from live2d_semi_auto.core import composite
+    atlas_upload_setup(window, tmp_path, monkeypatch)
+    monkeypatch.setattr(QMessageBox, "question", lambda *a: QMessageBox.Yes)
+    monkeypatch.setattr(window, "confirm_alignment", lambda *a: True)
+    window.align_parts()
+    wait_for_worker(window)
+    before = window.editor.project.parts[0].artwork.copy()
+    part_id = window.editor.project.parts[0].id
+    inspected = []
+
+    def edit_dialog(dialog):
+        dialog.findChildren(QDoubleSpinBox)[2].setValue(2)
+        return QDialog.Accepted
+
+    monkeypatch.setattr(QDialog, "exec", edit_dialog)
+    monkeypatch.setattr(window, "confirm_alignment", lambda *a: inspected.append(a[-1].copy()) or True)
+    window.adjust_alignment()
+    wait_for_worker(window)
+    assert not np.array_equal(window.editor.project.parts[0].artwork, before)
+    assert window.editor.project.parts[0].id == part_id
+    assert np.array_equal(composite(window.editor.project), inspected[0])
+    window.history(False)
+    assert np.array_equal(window.editor.project.parts[0].artwork, before)

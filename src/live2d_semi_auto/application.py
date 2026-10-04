@@ -1,6 +1,8 @@
 """Editing transactions and reversible manual/inference operations."""
 
 from collections import deque
+from copy import deepcopy
+from dataclasses import replace
 import cv2
 import numpy as np
 
@@ -107,6 +109,12 @@ class Editor:
     def accept_parts(self, proposal: PartsProposal) -> None:
         # Add proposals; never discard existing manual parts.
         candidate = self.project.snapshot()
+        if not isinstance(proposal.assets, dict):
+            raise ValueError("元パーツシートの一覧が不正です。")
+        for digest, pixels in proposal.assets.items():
+            if digest in candidate.assets and not np.array_equal(candidate.assets[digest], pixels):
+                raise ValueError("同じSHA-256の元パーツシートに異なる画像が指定されています。")
+            candidate.assets[digest] = pixels
         names = {p.name.casefold() for p in candidate.parts}
         for part in proposal.parts:
             name = part.name
@@ -115,12 +123,39 @@ class Editor:
                 name = f"{part.name}_{suffix}"
                 suffix += 1
             names.add(name.casefold())
-            candidate.parts.append(Part(name, part.mask.copy(), part.kind))
+            candidate.parts.append(replace(
+                part, name=name, mask=part.mask.copy(),
+                hidden_mask=part.hidden_mask.copy() if part.hidden_mask is not None else None,
+                alignment=deepcopy(part.alignment),
+            ))
         errors = validate(candidate)
         if errors or not proposal.parts:
             raise ValueError("\n".join(errors) or "分割候補がありません。")
         self.checkpoint()
-        candidate.history.append({"operation": "auto-parts", **proposal.metadata})
+        candidate.history.append({"operation": "auto-parts", **deepcopy(proposal.metadata)})
+        self.project = candidate
+
+    def adjust_alignment(self, index: int, *, scale: float = 1, angle: float = 0,
+                         offset: tuple[float, float] = (0, 0)) -> None:
+        """Validate the complete adjusted state before creating an undo entry."""
+        from .alignment import adjust_part
+
+        part = self.project.parts[index]
+        if (part.generated is not None or part.generated_mask is not None
+                or (part.hidden_mask is not None and np.any(part.hidden_mask))):
+            raise ValueError("補完領域を持つパーツは配置変更できません。補完前の状態へ戻してください。")
+        adjusted = adjust_part(part, self.project.size, scale=scale, angle=angle, offset=offset)
+        if adjusted.id != part.id:
+            raise ValueError("配置変更でパーツIDを変更することはできません。")
+        candidate = self.project.snapshot()
+        candidate.parts[index] = adjusted
+        errors = validate(candidate)
+        if errors:
+            raise ValueError("\n".join(errors))
+        self.checkpoint()
+        candidate.history.append({"operation": "adjust-alignment", "part_id": part.id,
+                                  "scale": scale, "angle": angle, "offset": list(offset),
+                                  "alignment": deepcopy(adjusted.alignment)})
         self.project = candidate
 
     def repair_mask(self, index: int) -> np.ndarray:

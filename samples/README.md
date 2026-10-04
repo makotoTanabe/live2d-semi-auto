@@ -11,7 +11,11 @@ The automated sample test splits the canvas into two geometric regions to verify
 - `results/automatic/`: 8 deterministic color-region masks, color-coded overlay, editable project, PNG package, and layered PSD. Regions are color clusters, not semantic hair/face/eye annotations. Background is retained, and the PNG/PSD layer composites reconstruct the source exactly.
 - `results/inpainting/`: a synthetic missing hair patch, before/after images and projects, target/generated masks, neural-repaired PNG package, and PSD. This intentionally withholds a visible 100×100 patch, predicts it with CPU LaMa, and preserves all other visible pixels. It demonstrates the inference path; it does not establish recovery of genuinely unseen anatomy or exact recovery of the withheld patch.
 - `results/report.json`: recipe, model checksum, recorded preprocessing transform, artifact SHA-256 values, and observed checks. Cubism validation is recorded as unrun.
-- `gpt_validation.json`: the live GPT attempt's result. Authentication/model access succeeded; generation was blocked by an exhausted API credit balance. There are no fabricated GPT masks or images and no credential values in this report.
+- `gpt_validation.json`: the historical first-key credit failure and the subsequent key's successful live alignment. No credential values are included.
+- `parts_atlas.png` and `parts_atlas_generation.json`: a new transparent nine-part atlas generated using the original character as a reference, with the exact prompt and provenance. These are newly generated shapes, not pixels separated from the original. Shape differences and small alpha-edge speckles remain visible and need manual cleanup.
+- `results/alignment/`: **live GPT** matching and initial placement of nine atlas parts using `gpt-5.6-luna`, including the actual response, original inputs, masks, original crops, transforms, editable project, transparent PNG layers, PSD, comparison/difference/coverage images, isolated-layer contact sheet, and report. Placement is a proposal: large parts have anchor residuals of approximately 20–43px, some crops extend outside the reference canvas, arms are absent from the generated atlas, and generated shapes differ from the reference. This is a functional demonstration, not finished Live2D material or a quality benchmark.
+- `results/alignment_attempts/`: the recorded empty response from an earlier output-budget exhaustion and its diagnosis. No project or masks were created from invalid responses.
+- `alignment_ui.png`: the current GUI displaying the nine-part alignment project.
 - `manual_ui.png`: screenshot of the earlier manual-editing slice.
 - `current_ui.png`: screenshot of the current app with the automatic sample loaded.
 
@@ -24,3 +28,14 @@ uv run --locked --extra ai python scripts/create_samples.py --model /path/to/mod
 ```
 
 The fixed occlusion coordinates are designed for the included 1254×1254 original fixture. Reload any `.l2split` file in the app to inspect editable masks and generation provenance. PSDs are verified with psd-tools, not with a running Cubism instance.
+
+Replay the recorded successful AI correspondences without a key or network request:
+
+```bash
+uv run --locked python scripts/create_alignment_sample.py \
+  --atlas samples/parts_atlas.png --model gpt-5.6-luna \
+  --response samples/results/alignment/response.json \
+  --output /tmp/alignment-replay
+```
+
+The offline replay was verified to reproduce identical composited pixels and part IDs. For a new live request, replace `--response ...` with `--upload`; the API key is read from `GPT_API_KEY` / `OPENAI_API_KEY` or a hidden prompt. `--response-log /new/path.json` can retain a response for diagnosis even when its proposal is rejected. The GUI requires separate upload and adoption confirmations. Keys are never included in these artifacts.

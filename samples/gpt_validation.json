@@ -1,5 +1,6 @@
 {
   "date": "2026-10-04",
+  "scope": "Historical first-key attempt; the subsequent usable key is recorded separately below",
   "source": "original_character.png",
   "model": "gpt-4.1",
   "authenticated_model_read": "success_http_200",
@@ -9,5 +10,20 @@
   "error_code": "credit_balance_exhausted",
   "semantic_results_created": false,
   "credential_values_saved": false,
-  "required_action": "Add API credits to the associated OpenAI organization/project before retrying"
+  "required_action": "Add API credits to the associated OpenAI organization/project before retrying",
+  "subsequent_key_validation": {
+    "date": "2026-10-04",
+    "authentication": "success",
+    "gpt_4_1_completion": "denied_http_403_model_not_found",
+    "accessible_models": [
+      "gpt-5.6-luna"
+    ],
+    "minimal_text_completion": "success",
+    "dual_image_alignment": "success",
+    "aligned_parts": 9,
+    "response": "results/alignment/response.json",
+    "report": "results/alignment/report.json",
+    "credential_values_saved": false,
+    "quality": "requires_human_review"
+  }
 }
