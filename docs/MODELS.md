@@ -38,4 +38,12 @@ The GUI identifies `api.openai.com` and asks before sending the original artwork
 
 Returned boxes are mapped into canvas coordinates, refined with local GrabCut, and fall back to rectangles if refinement fails. They are editable proposals, with classification, boxes, model, resize transform and refinement method preserved in operation history. GPT localization may be inaccurate or overlapping; it does not produce certified pixel masks, guarantee complete coverage, or infer genuinely hidden anatomy.
 
-No GPT API key was available during implementation. Schema handling, coordinate conversion, mask refinement, rejection of malformed output, and the GUI upload-confirmation gate are tested with controlled responses. Live GPT classification and quality remain unverified; the committed sample outputs are local color clustering and LaMa, not fabricated GPT results.
+Schema handling, coordinate conversion, mask refinement, rejection of malformed output, and the GUI upload-confirmation gate are tested with controlled responses. On 2026-10-04 an explicitly supplied key authenticated successfully and could read the gpt-4.1 model. Vision and minimal text completion requests were rejected with HTTP 429, `insufficient_quota` / `credit_balance_exhausted`: the API account had no credits remaining. No credential value was saved. Live GPT classification and quality therefore remain unverified; the committed sample outputs are local color clustering and LaMa, not fabricated GPT results. The observed result is recorded in `samples/gpt_validation.json`.
+
+After credits are added, explicitly generate GPT samples with:
+
+```bash
+uv run --locked python scripts/create_gpt_sample.py --upload --output samples/gpt_results
+```
+
+The script uses an injected environment binding or prompts for a hidden key; it never takes the key as a command-line argument or saves it. It writes the response, masks, editable project, PNG layers, PSD, and coverage report after a successful request. Preserve current data by choosing a new output directory. A saved `response.json` can be replayed offline using `--response /path/to/response.json` instead of `--upload`. Reports include uncovered and overlapping pixels; correct reconstruction alone does not establish useful semantic separation. Independent overlapping masks may duplicate opaque artwork and increase the alpha of translucent artwork.

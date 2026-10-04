@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-04",
+  "source": "original_character.png",
+  "model": "gpt-4.1",
+  "authenticated_model_read": "success_http_200",
+  "vision_completion": "blocked_http_429",
+  "minimal_text_completion": "blocked_http_429",
+  "error_type": "insufficient_quota",
+  "error_code": "credit_balance_exhausted",
+  "semantic_results_created": false,
+  "credential_values_saved": false,
+  "required_action": "Add API credits to the associated OpenAI organization/project before retrying"
+}

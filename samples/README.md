@@ -11,6 +11,7 @@ The automated sample test splits the canvas into two geometric regions to verify
 - `results/automatic/`: 8 deterministic color-region masks, color-coded overlay, editable project, PNG package, and layered PSD. Regions are color clusters, not semantic hair/face/eye annotations. Background is retained, and the PNG/PSD layer composites reconstruct the source exactly.
 - `results/inpainting/`: a synthetic missing hair patch, before/after images and projects, target/generated masks, neural-repaired PNG package, and PSD. This intentionally withholds a visible 100×100 patch, predicts it with CPU LaMa, and preserves all other visible pixels. It demonstrates the inference path; it does not establish recovery of genuinely unseen anatomy or exact recovery of the withheld patch.
 - `results/report.json`: recipe, model checksum, recorded preprocessing transform, artifact SHA-256 values, and observed checks. Cubism validation is recorded as unrun.
+- `gpt_validation.json`: the live GPT attempt's result. Authentication/model access succeeded; generation was blocked by an exhausted API credit balance. There are no fabricated GPT masks or images and no credential values in this report.
 - `manual_ui.png`: screenshot of the earlier manual-editing slice.
 - `current_ui.png`: screenshot of the current app with the automatic sample loaded.
 

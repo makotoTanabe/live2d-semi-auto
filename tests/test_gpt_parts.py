@@ -1,6 +1,7 @@
 import base64
 import io
 import json
+from urllib.error import HTTPError
 
 import numpy as np
 from PIL import Image
@@ -8,7 +9,7 @@ from PySide6.QtWidgets import QMessageBox
 import pytest
 
 from live2d_semi_auto.application import Editor
-from live2d_semi_auto.gpt_parts import GPTPartsBackend
+from live2d_semi_auto.gpt_parts import GPTPartsBackend, GPTRequestError
 
 
 def response(parts):
@@ -76,3 +77,17 @@ def test_gpt_image_resize_transform():
     assert proposal.metadata["sent_size"] == [1024, 512]
     assert proposal.metadata["parts"][0]["canvas_bbox"] == [0, 0, 1200, 600]
     assert proposal.metadata["parts"][0]["mask_method"] == "rectangle-fallback"
+
+
+@pytest.mark.parametrize("code,expected", [("insufficient_quota", "利用枠が不足"),
+                                          ("credit_balance_exhausted", "利用枠が不足"),
+                                          ("rate_limit_exceeded", "速度制限")])
+def test_api_quota_and_rate_limit_are_distinguished(project, monkeypatch, code, expected):
+    def fail(*args, **kwargs):
+        response = io.BytesIO(json.dumps({"error": {"code": code, "message": "private server details"}}).encode())
+        raise HTTPError("https://api.openai.com", 429, "Too many requests", {}, response)
+    monkeypatch.setattr("urllib.request.urlopen", fail)
+    with pytest.raises(GPTRequestError, match=expected) as error:
+        GPTPartsBackend(api_key="test-token").propose_parts(project.source)
+    assert error.value.code == code
+    assert "private server details" not in str(error.value)

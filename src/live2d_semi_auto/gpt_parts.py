@@ -5,6 +5,7 @@ import io
 import json
 import math
 import os
+import re
 from urllib.error import HTTPError, URLError
 import urllib.request
 
@@ -17,6 +18,21 @@ from .inference import PartsProposal
 
 
 ENDPOINT = "https://api.openai.com/v1/chat/completions"
+
+
+class GPTRequestError(ValueError):
+    def __init__(self, status: int, code: str | None):
+        self.status = status
+        self.code = code
+        if code in {"insufficient_quota", "credit_balance_exhausted", "billing_hard_limit_reached"}:
+            detail = "APIの利用枠が不足しています。OpenAI側の請求設定・残高・プロジェクトの利用枠を確認してください。"
+        elif status == 429 and code == "rate_limit_exceeded":
+            detail = "APIの速度制限に達しました。利用枠とレート制限を確認して、時間を置いて再試行してください。"
+        elif status == 429:
+            detail = "APIの利用制限により拒否されました。利用枠とレート制限を確認してください。"
+        else:
+            detail = "認証とモデルへのアクセスを確認してください。"
+        super().__init__(f"GPT APIからHTTP {status}が返りました。{detail}")
 SCHEMA = {
     "type": "object", "additionalProperties": False,
     "properties": {"parts": {"type": "array", "minItems": 1, "maxItems": 16, "items": {
@@ -72,7 +88,15 @@ class GPTPartsBackend:
             with urllib.request.urlopen(request, timeout=60) as response:
                 return json.load(response)
         except HTTPError as exc:
-            raise ValueError(f"GPT APIからHTTP {exc.code}が返りました。認証・利用枠・モデルへのアクセスを確認してください。") from None
+            code = None
+            try:
+                error = json.loads(exc.read(65536)).get("error", {})
+                value = error.get("code") or error.get("type")
+                if isinstance(value, str) and re.fullmatch(r"[a-z_]{1,64}", value):
+                    code = value
+            except (ValueError, AttributeError):
+                pass
+            raise GPTRequestError(exc.code, code) from None
         except (URLError, TimeoutError) as exc:
             raise ValueError("GPT APIへの接続に失敗しました。ネットワーク設定を確認してください。") from exc
 
