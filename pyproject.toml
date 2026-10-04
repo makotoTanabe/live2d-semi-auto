@@ -1,0 +1,26 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "live2d-semi-auto"
+version = "0.1.0"
+description = "Human-editable Live2D illustration parts separation"
+requires-python = ">=3.12"
+dependencies = [
+  "numpy>=2.0,<3",
+  "Pillow>=11,<13",
+  "opencv-python-headless>=4.10,<6",
+  "PySide6>=6.8,<7",
+]
+
+[dependency-groups]
+dev = ["pytest>=8,<10"]
+
+[project.scripts]
+live2d-semi-auto = "live2d_semi_auto.__main__:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
