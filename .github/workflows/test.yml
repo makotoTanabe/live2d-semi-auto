@@ -7,10 +7,16 @@ jobs:
       QT_QPA_PLATFORM: offscreen
     steps:
       - uses: actions/checkout@v4
+      - name: Install Qt headless runtime
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y libegl1
       - uses: astral-sh/setup-uv@v6
         with:
           python-version: '3.12'
       - run: uv sync --locked --extra web
+      - name: Check Qt offscreen startup
+        run: uv run --locked --extra web python -c "from PySide6.QtWidgets import QApplication; app = QApplication([]); print('Qt offscreen startup succeeded')"
       - run: uv run --locked --extra web pytest -q
       - run: uv build
   browser:

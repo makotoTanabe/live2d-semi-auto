@@ -71,6 +71,8 @@ Undoは `Ctrl+Z`、Redoは `Ctrl+Shift+Z` です。パーツ作成・削除・�
 
 ## テスト・サンプル
 
+Ubuntuの画面がない環境でQtのテストを実行する場合は、`sudo apt-get install libegl1` でOS側のEGLライブラリを用意してください。`QT_QPA_PLATFORM=offscreen` の場合も、PySide6の読み込みにこの共有ライブラリが必要です。CIでは明示的にインストールし、Qt起動を確認してからテストを実行します。
+
 ```bash
 QT_QPA_PLATFORM=offscreen uv run --locked --extra web pytest -q
 ```
